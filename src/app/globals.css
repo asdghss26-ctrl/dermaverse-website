@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   EMERALD & GOLD CLINIC — Design Tokens (Tailwind v4)
+   All palette, typography, spacing and radius tokens live here.
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ── Palette ────────────────────────────────────────────── */
+  --color-emerald-brand: #1F5C46;
+  --color-emerald-deep: #143D2E;
+  --color-gold: #C9A45C;           /* TODO: replace with exact logo hex */
+  --color-gold-light: #EBDDB0;
+  --color-ivory: #FFFBF5;
+  --color-sage: #E6EFE8;
+  --color-charcoal: #23303A;
+  --color-oak: #B07A47;            /* tiny accent only */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+  /* Semantic aliases */
+  --color-background: var(--color-ivory);
+  --color-foreground: var(--color-charcoal);
+  --color-primary: var(--color-gold);
+  --color-primary-text: var(--color-emerald-deep);
+  --color-secondary: var(--color-emerald-brand);
+  --color-section-alt: var(--color-sage);
+  --color-footer: var(--color-emerald-deep);
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-heading: var(--font-cormorant);
+  --font-body: var(--font-dm-sans);
+
+  /* ── Radius ─────────────────────────────────────────────── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  /* ── Shadows ────────────────────────────────────────────── */
+  --shadow-card: 0 2px 12px rgba(31, 92, 70, 0.06);
+  --shadow-card-hover: 0 4px 20px rgba(31, 92, 70, 0.10);
+  --shadow-nav: 0 1px 8px rgba(0, 0, 0, 0.06);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base styles ──────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-ivory);
+  color: var(--color-charcoal);
+  font-family: var(--font-body), system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), Georgia, serif;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* ── Focus styles (keyboard only) ─────────────────────────── */
+*:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Skip-to-content link ─────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 100;
+  padding: 8px 16px;
+  background: var(--color-gold);
+  color: var(--color-emerald-deep);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  transition: top 200ms ease;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
+/* ── Utility: hide scrollbar for horizontal snap rows ──── */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Dev-only SAMPLE badge ─────────────────────────────── */
+.sample-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 2px 8px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-pill);
+  z-index: 10;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+/* ── Watercolor blob decoration ────────────────────────── */
+.watercolor-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 0;
 }
