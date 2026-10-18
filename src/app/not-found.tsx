@@ -33,8 +33,6 @@ export default function NotFound() {
         </div>
       </Section>
 
-      {/* Bottom spacer for mobile sticky bar */}
-      <div className="h-[52px] lg:h-0" aria-hidden="true" />
     </>
   );
 }

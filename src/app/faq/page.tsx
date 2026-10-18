@@ -9,6 +9,23 @@ import { MessageCircle } from "lucide-react";
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
   description: `Common questions about visiting ${clinic.fullName} in Adyar, Chennai — appointments, parking, what to expect and more.`,
+  openGraph: {
+    title: `Frequently Asked Questions | ${clinic.fullName}`,
+    description: `Common questions about visiting ${clinic.fullName} in Adyar, Chennai — appointments, parking, what to expect and more.`,
+    url: "/faq",
+    siteName: clinic.fullName,
+    locale: "en_IN",
+    type: "website",
+    // TODO: client to supply a share image (og-image.jpg)
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${clinic.fullName} — Frequently Asked Questions`,
+      },
+    ],
+  },
 };
 
 export default function FAQPage() {
@@ -56,8 +73,6 @@ export default function FAQPage() {
         </div>
       </Section>
 
-      {/* Bottom spacer for mobile sticky bar */}
-      <div className="h-[52px] lg:h-0" aria-hidden="true" />
     </>
   );
 }

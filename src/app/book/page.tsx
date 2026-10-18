@@ -8,6 +8,23 @@ import { Phone, MessageCircle, MapPin, Clock } from "lucide-react";
 export const metadata: Metadata = {
   title: "Book Consultation",
   description: `Book a dermatology consultation at ${clinic.fullName} in Adyar, Chennai. Call or WhatsApp to schedule your appointment.`,
+  openGraph: {
+    title: `Book Consultation | ${clinic.fullName}`,
+    description: `Book a dermatology consultation at ${clinic.fullName} in Adyar, Chennai. Call or WhatsApp to schedule your appointment.`,
+    url: "/book",
+    siteName: clinic.fullName,
+    locale: "en_IN",
+    type: "website",
+    // TODO: client to supply a share image (og-image.jpg)
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `Book Consultation — ${clinic.fullName}`,
+      },
+    ],
+  },
 };
 
 export default function BookPage() {

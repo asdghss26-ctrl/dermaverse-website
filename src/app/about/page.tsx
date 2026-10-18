@@ -10,6 +10,23 @@ import { MapPin, Car, ShieldCheck, UserCheck, Sparkles } from "lucide-react";
 export const metadata: Metadata = {
   title: "About Dr. Jansi Priyadharshini A",
   description: `Learn about ${clinic.doctor.name}, Consultant Dermatologist with ${clinic.doctor.experience} of experience in evidence-based clinical dermatology, aesthetic procedures and laser treatments in Adyar, Chennai.`,
+  openGraph: {
+    title: `About Dr. Jansi Priyadharshini A | ${clinic.fullName}`,
+    description: `Learn about ${clinic.doctor.name}, Consultant Dermatologist with ${clinic.doctor.experience} of experience in evidence-based clinical dermatology, aesthetic procedures and laser treatments in Adyar, Chennai.`,
+    url: "/about",
+    siteName: clinic.fullName,
+    locale: "en_IN",
+    type: "website",
+    // TODO: client to supply a share image (og-image.jpg)
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `About Dr. Jansi Priyadharshini A — ${clinic.fullName}`,
+      },
+    ],
+  },
 };
 
 export default function AboutPage() {
@@ -159,8 +176,6 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {/* Bottom spacer for mobile sticky bar */}
-      <div className="h-[52px] lg:h-0" aria-hidden="true" />
     </>
   );
 }

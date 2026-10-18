@@ -31,6 +31,14 @@ export function PhysicianJsonLd() {
       "@type": "MedicalBusiness",
       name: clinic.fullName,
     },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: `${clinic.address.line1}, ${clinic.address.line2}`,
+      addressLocality: clinic.address.city,
+      addressRegion: clinic.address.state,
+      postalCode: clinic.address.pincode,
+      addressCountry: "IN",
+    },
     telephone: clinic.phone.href.replace("tel:", ""),
     url: BASE_URL,
     // TODO: add image URL when portrait is available
@@ -61,26 +69,11 @@ export function LocalBusinessJsonLd() {
       postalCode: clinic.address.pincode,
       addressCountry: "IN",
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      // TODO: add exact latitude and longitude
-      latitude: 13.0067,
-      longitude: 80.2573,
-    },
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: clinic.google.rating,
       reviewCount: clinic.google.reviewCount,
-      bestRating: 5,
-      worstRating: 1,
     },
-    amenityFeature: {
-      "@type": "LocationFeatureSpecification",
-      name: "Parking",
-      value: true,
-    },
-    medicalSpecialty: "Dermatology",
-    // TODO: add openingHoursSpecification when confirmed with client
   };
 
   return (

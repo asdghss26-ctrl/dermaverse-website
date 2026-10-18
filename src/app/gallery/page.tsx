@@ -7,6 +7,23 @@ import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 export const metadata: Metadata = {
   title: "Gallery",
   description: `Take a look inside ${clinic.fullName} — a clean, comfortable dermatology clinic in Adyar, Chennai.`,
+  openGraph: {
+    title: `Gallery | ${clinic.fullName}`,
+    description: `Take a look inside ${clinic.fullName} — a clean, comfortable dermatology clinic in Adyar, Chennai.`,
+    url: "/gallery",
+    siteName: clinic.fullName,
+    locale: "en_IN",
+    type: "website",
+    // TODO: client to supply a share image (og-image.jpg)
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${clinic.fullName} — Clinic Gallery`,
+      },
+    ],
+  },
 };
 
 export default function GalleryPage() {
@@ -53,8 +70,6 @@ export default function GalleryPage() {
         </div>
       </Section>
 
-      {/* Bottom spacer for mobile sticky bar */}
-      <div className="h-[52px] lg:h-0" aria-hidden="true" />
     </>
   );
 }

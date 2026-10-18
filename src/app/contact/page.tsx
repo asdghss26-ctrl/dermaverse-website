@@ -9,6 +9,23 @@ import { LocalBusinessJsonLd } from "@/components/seo/JsonLd";
 export const metadata: Metadata = {
   title: "Contact",
   description: `Contact ${clinic.fullName} in Adyar, Chennai. Call, WhatsApp or visit us — ample parking available.`,
+  openGraph: {
+    title: `Contact | ${clinic.fullName}`,
+    description: `Contact ${clinic.fullName} in Adyar, Chennai. Call, WhatsApp or visit us — ample parking available.`,
+    url: "/contact",
+    siteName: clinic.fullName,
+    locale: "en_IN",
+    type: "website",
+    // TODO: client to supply a share image (og-image.jpg)
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `Contact ${clinic.fullName}`,
+      },
+    ],
+  },
 };
 
 export default function ContactPage() {
@@ -120,8 +137,6 @@ export default function ContactPage() {
         </div>
       </Section>
 
-      {/* Bottom spacer for mobile sticky bar */}
-      <div className="h-[52px] lg:h-0" aria-hidden="true" />
     </>
   );
 }

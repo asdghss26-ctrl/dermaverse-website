@@ -9,6 +9,23 @@ import { MessageCircle, Phone } from "lucide-react";
 export const metadata: Metadata = {
   title: "Services",
   description: `Explore dermatology services at ${clinic.fullName} — skin care, hair restoration and laser treatments in Adyar, Chennai.`,
+  openGraph: {
+    title: `Services | ${clinic.fullName}`,
+    description: `Explore dermatology services at ${clinic.fullName} — skin care, hair restoration and laser treatments in Adyar, Chennai.`,
+    url: "/services",
+    siteName: clinic.fullName,
+    locale: "en_IN",
+    type: "website",
+    // TODO: client to supply a share image (og-image.jpg)
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${clinic.fullName} — Services`,
+      },
+    ],
+  },
 };
 
 export default function ServicesPage() {
@@ -95,8 +112,6 @@ export default function ServicesPage() {
         </div>
       </Section>
 
-      {/* Bottom spacer for mobile sticky bar */}
-      <div className="h-[52px] lg:h-0" aria-hidden="true" />
     </>
   );
 }

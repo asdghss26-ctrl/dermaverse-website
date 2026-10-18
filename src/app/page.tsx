@@ -1,6 +1,29 @@
+import type { Metadata } from "next";
 import { clinic } from "@/data/clinic";
 import { services, serviceCategories } from "@/data/services";
 import { PhysicianJsonLd, LocalBusinessJsonLd } from "@/components/seo/JsonLd";
+
+export const metadata: Metadata = {
+  title: `${clinic.fullName} | Adyar, Chennai`,
+  description: clinic.doctor.approach,
+  openGraph: {
+    title: `${clinic.fullName} | Adyar, Chennai`,
+    description: clinic.doctor.approach,
+    url: "/",
+    siteName: clinic.fullName,
+    locale: "en_IN",
+    type: "website",
+    // TODO: client to supply a share image (og-image.jpg)
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: clinic.fullName,
+      },
+    ],
+  },
+};
 import { reviews } from "@/data/reviews";
 import { faqs } from "@/data/faqs";
 import { Section } from "@/components/ui/Section";
@@ -340,8 +363,6 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* Bottom spacer for mobile sticky bar */}
-      <div className="h-[52px] lg:h-0" aria-hidden="true" />
     </>
   );
 }
