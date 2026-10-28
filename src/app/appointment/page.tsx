@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { clinic } from "@/data/clinic";
 import { AppointmentForm } from "@/components/AppointmentForm";
 import { Section } from "@/components/ui/Section";
-import { cn } from "@/lib/utils";
 import { MessageCircle } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -23,7 +22,7 @@ export default function AppointmentPage() {
         </h1>
 
         <p className="text-brown max-w-md mb-8">
-          Please fill in your details. We'll confirm your appointment during
+          Please fill in your details. We&apos;ll confirm your appointment during
           clinic hours: Mon to Sat, 10 AM to 7 PM.
         </p>
 

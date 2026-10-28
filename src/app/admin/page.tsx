@@ -4,6 +4,19 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Appointment, sampleAppointments } from "@/data/appointments";
+import { auth, isFirebaseConfigured } from "@/lib/firebase";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  type User as FirebaseUser,
+} from "firebase/auth";
+import {
+  subscribeAppointments,
+  updateAppointmentStatus,
+  deleteAppointment as deleteFirestoreAppointment,
+  createAppointment as createFirestoreAppointment,
+} from "@/lib/appointments";
 import {
   Search,
   LayoutDashboard,
@@ -28,6 +41,9 @@ import {
   Columns3,
   ListFilter,
   Check,
+  Lock,
+  Loader2,
+  ShieldCheck,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -89,6 +105,142 @@ const COMMON_CONCERNS = [
 ];
 
 /* ------------------------------------------------------------------ */
+/*  Doctor Login Screen                                                */
+/* ------------------------------------------------------------------ */
+
+interface DoctorLoginViewProps {
+  onSuccess: (user: FirebaseUser) => void;
+}
+
+function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
+  const [email, setEmail] = useState("dermversewebsite1@gmail.com");
+  const [password, setPassword] = useState("dermverse@2026");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+      );
+      onSuccess(userCredential.user);
+    } catch (err: unknown) {
+      const errorMsg =
+        err instanceof Error
+          ? err.message
+          : "Invalid email or password. Please verify credentials.";
+      setError(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ backgroundColor: T.bg }}
+    >
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        {/* Brand Header */}
+        <div
+          className="p-8 text-center text-white"
+          style={{ backgroundColor: T.sidebar }}
+        >
+          <div
+            className="w-12 h-12 mx-auto rounded-xl flex items-center justify-center font-bold text-lg mb-3 shadow-md"
+            style={{ backgroundColor: T.accent, color: T.white }}
+          >
+            D
+          </div>
+          <h1 className="text-xl font-bold tracking-tight">Dermverse Clinic</h1>
+          <p className="text-xs text-slate-300 mt-1 flex items-center justify-center gap-1.5">
+            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            Doctor & Administration Portal
+          </p>
+        </div>
+
+        {/* Form Body */}
+        <form onSubmit={handleSubmit} className="p-8 space-y-5">
+          {error && (
+            <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-start gap-2">
+              <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Doctor Email
+            </label>
+            <div className="relative">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="doctor@dermverse.com"
+                className="w-full rounded-lg border border-slate-300 py-2.5 px-3.5 text-sm text-slate-900 outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 transition-all"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                className="w-full rounded-lg border border-slate-300 py-2.5 px-3.5 text-sm text-slate-900 outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 transition-all"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 rounded-lg text-white font-semibold text-sm cursor-pointer shadow-sm hover:opacity-95 transition-opacity flex items-center justify-center gap-2"
+            style={{ backgroundColor: T.accent }}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              <>
+                <Lock className="h-4 w-4" />
+                Sign In to Dashboard
+              </>
+            )}
+          </button>
+
+          <div className="pt-2 text-center">
+            <Link
+              href="/"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors inline-flex items-center gap-1"
+            >
+              <ExternalLink className="h-3 w-3" />
+              Return to Public Clinic Website
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Sidebar                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -97,9 +249,16 @@ interface SidebarProps {
   onClose: () => void;
   activeView: ViewMode;
   onSelectView: (view: ViewMode) => void;
+  onLogout: () => void;
 }
 
-function Sidebar({ open, onClose, activeView, onSelectView }: SidebarProps) {
+function Sidebar({
+  open,
+  onClose,
+  activeView,
+  onSelectView,
+  onLogout,
+}: SidebarProps) {
   return (
     <>
       {open && (
@@ -201,7 +360,7 @@ function Sidebar({ open, onClose, activeView, onSelectView }: SidebarProps) {
           >
             <span className="flex items-center gap-2.5">
               <CalendarCheck className="h-4 w-4" />
-              Book Appointment
+              Patient Booking Form
             </span>
             <ExternalLink className="h-3.5 w-3.5 opacity-60" />
           </Link>
@@ -219,13 +378,20 @@ function Sidebar({ open, onClose, activeView, onSelectView }: SidebarProps) {
           </Link>
         </nav>
 
-        {/* Doctor Info & Exit */}
-        <div className="p-3 border-t border-[#1E3A5A]">
+        {/* Doctor Info & Logout */}
+        <div className="p-3 border-t border-[#1E3A5A] space-y-1">
+          <button
+            onClick={onLogout}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-red-400 hover:text-red-300 hover:bg-[#1B3550] transition-colors cursor-pointer text-left"
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            Sign Out
+          </button>
           <Link
             href="/"
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-[#94A3B8] hover:text-white hover:bg-[#1B3550] transition-colors"
           >
-            <LogOut className="h-4 w-4 shrink-0" />
+            <ExternalLink className="h-4 w-4 shrink-0" />
             Exit Dashboard
           </Link>
         </div>
@@ -242,9 +408,15 @@ interface TopBarProps {
   onMenuClick: () => void;
   onOpenAddModal: () => void;
   onResetData: () => void;
+  userEmail?: string | null;
 }
 
-function TopBar({ onMenuClick, onOpenAddModal, onResetData }: TopBarProps) {
+function TopBar({
+  onMenuClick,
+  onOpenAddModal,
+  onResetData,
+  userEmail,
+}: TopBarProps) {
   return (
     <header
       className="flex h-[56px] items-center justify-between shrink-0 px-4 lg:px-6 border-b"
@@ -274,7 +446,7 @@ function TopBar({ onMenuClick, onOpenAddModal, onResetData }: TopBarProps) {
             Doctor Dashboard
           </h1>
           <p className="text-[11px] text-slate-500 hidden sm:block">
-            Dr. Jansi&apos;s Dermverse Clinic &bull; Adyar, Chennai
+            Dr. Jansi&apos;s Dermverse Clinic &bull; Live Cloud Database
           </p>
         </div>
       </div>
@@ -303,10 +475,13 @@ function TopBar({ onMenuClick, onOpenAddModal, onResetData }: TopBarProps) {
           <div
             className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
             style={{ backgroundColor: T.accent, color: T.white }}
-            aria-label="Doctor profile"
+            title={userEmail || "Dr. Jansi"}
           >
             <User className="h-4 w-4" />
           </div>
+          <span className="text-xs font-semibold text-slate-700 hidden sm:inline">
+            {userEmail ? userEmail.split("@")[0] : "Dr. Jansi"}
+          </span>
         </div>
       </div>
     </header>
@@ -794,11 +969,14 @@ function AddAppointmentModal({ open, onClose, onAdd }: AddAppointmentModalProps)
 /* ------------------------------------------------------------------ */
 
 export default function AdminDashboard() {
-  /* -- State -------------------------------------------------------- */
+  /* -- Auth State --------------------------------------------------- */
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+  const [authLoading, setAuthLoading] = useState(() => isFirebaseConfigured());
+
+  /* -- Dashboard State ---------------------------------------------- */
   const [appointments, setAppointments] = useState<Appointment[]>(() =>
     sampleAppointments.map((a) => ({ ...a }))
   );
-  const [isLoaded, setIsLoaded] = useState(false);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("kanban");
@@ -814,69 +992,37 @@ export default function AdminDashboard() {
     }, 3200);
   }, []);
 
-  // Load from localStorage on mount, sync when storage changes
-  const loadAppointmentsFromStorage = useCallback(() => {
-    try {
-      const stored = localStorage.getItem("dermverse-dashboard-apps");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setAppointments(parsed);
-          return;
-        }
-      }
-      // If empty or invalid, keep sample data and seed storage
-      localStorage.setItem(
-        "dermverse-dashboard-apps",
-        JSON.stringify(sampleAppointments)
-      );
-    } catch {
-      // ignore corrupt storage
-    }
+  // Listen to Firebase Auth state
+  useEffect(() => {
+    if (!isFirebaseConfigured()) return;
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      setAuthLoading(false);
+    });
+
+    return unsubscribe;
   }, []);
 
+  // Real-time Firestore subscription when logged in
   useEffect(() => {
-    loadAppointmentsFromStorage();
-    setIsLoaded(true);
+    if (!currentUser) return;
 
-    const handleStorageChange = () => {
-      loadAppointmentsFromStorage();
-      showToast("Appointments updated from website");
-    };
-
-    const handleCustomEvent = (e: Event) => {
-      const customEvent = e as CustomEvent<Appointment>;
-      loadAppointmentsFromStorage();
-      if (customEvent.detail?.patientName) {
-        showToast(`New appointment from ${customEvent.detail.patientName}`);
+    const unsubscribe = subscribeAppointments(
+      (items) => {
+        setAppointments(items);
+      },
+      (err) => {
+        console.warn("Firestore subscription error:", err);
       }
-    };
+    );
 
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("dermverse:appointment-added", handleCustomEvent);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("dermverse:appointment-added", handleCustomEvent);
-    };
-  }, [loadAppointmentsFromStorage, showToast]);
-
-  // Persist to localStorage whenever appointments state changes
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem(
-        "dermverse-dashboard-apps",
-        JSON.stringify(appointments)
-      );
-    } catch {
-      // ignore
-    }
-  }, [appointments, isLoaded]);
+    return unsubscribe;
+  }, [currentUser]);
 
   /* -- Actions ------------------------------------------------------ */
   const handleAccept = useCallback(
-    (id: string) => {
+    async (id: string) => {
       setAppointments((cur) => {
         const target = cur.find((a) => a.id === id);
         if (target) showToast(`Accepted: ${target.patientName}`);
@@ -884,12 +1030,13 @@ export default function AdminDashboard() {
           a.id === id ? { ...a, status: "Accepted" as const } : a
         );
       });
+      await updateAppointmentStatus(id, "Accepted");
     },
     [showToast]
   );
 
   const handleReject = useCallback(
-    (id: string) => {
+    async (id: string) => {
       setAppointments((cur) => {
         const target = cur.find((a) => a.id === id);
         if (target) showToast(`Declined: ${target.patientName}`);
@@ -897,12 +1044,13 @@ export default function AdminDashboard() {
           a.id === id ? { ...a, status: "Rejected" as const } : a
         );
       });
+      await updateAppointmentStatus(id, "Rejected");
     },
     [showToast]
   );
 
   const handleRevert = useCallback(
-    (id: string) => {
+    async (id: string) => {
       setAppointments((cur) => {
         const target = cur.find((a) => a.id === id);
         if (target) showToast(`Reverted ${target.patientName} to Pending`);
@@ -910,26 +1058,29 @@ export default function AdminDashboard() {
           a.id === id ? { ...a, status: "Pending" as const } : a
         );
       });
+      await updateAppointmentStatus(id, "Pending");
     },
     [showToast]
   );
 
   const handleDelete = useCallback(
-    (id: string) => {
+    async (id: string) => {
       setAppointments((cur) => {
         const target = cur.find((a) => a.id === id);
         if (target) showToast(`Deleted: ${target.patientName}`);
         return cur.filter((a) => a.id !== id);
       });
+      await deleteFirestoreAppointment(id);
     },
     [showToast]
   );
 
   const handleAddAppointment = useCallback(
-    (newApptData: Omit<Appointment, "id">) => {
+    async (newApptData: Omit<Appointment, "id">) => {
+      const generatedId = await createFirestoreAppointment(newApptData);
       const newAppt: Appointment = {
         ...newApptData,
-        id: `appt-${Date.now()}`,
+        id: generatedId,
       };
       setAppointments((cur) => [newAppt, ...cur]);
       showToast(`Added appointment for ${newAppt.patientName}`);
@@ -946,6 +1097,16 @@ export default function AdminDashboard() {
       // ignore
     }
     showToast("Restored demo sample appointments");
+  }, [showToast]);
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await signOut(auth);
+      setCurrentUser(null);
+      showToast("Signed out of Doctor Dashboard");
+    } catch {
+      // ignore
+    }
   }, [showToast]);
 
   /* -- Derived data ------------------------------------------------- */
@@ -993,7 +1154,29 @@ export default function AdminDashboard() {
   /* -- Filter button options ---------------------------------------- */
   const STATUS_OPTIONS: StatusFilter[] = ["All", "Pending", "Accepted", "Rejected"];
 
-  /* -- Render ------------------------------------------------------- */
+  /* -- Render Loading State ----------------------------------------- */
+  if (authLoading) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: T.bg }}
+      >
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-teal-700" />
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
+            Loading Doctor Portal...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  /* -- Render Login State if Unauthenticated ------------------------- */
+  if (!currentUser && isFirebaseConfigured()) {
+    return <DoctorLoginView onSuccess={(user) => setCurrentUser(user)} />;
+  }
+
+  /* -- Render Authenticated Dashboard -------------------------------- */
   return (
     <div
       className="flex h-screen overflow-hidden"
@@ -1033,6 +1216,7 @@ export default function AdminDashboard() {
         onClose={() => setSidebarOpen(false)}
         activeView={viewMode}
         onSelectView={setViewMode}
+        onLogout={handleLogout}
       />
 
       {/* Main viewport */}
@@ -1042,6 +1226,7 @@ export default function AdminDashboard() {
           onMenuClick={() => setSidebarOpen(true)}
           onOpenAddModal={() => setAddModalOpen(true)}
           onResetData={handleResetData}
+          userEmail={currentUser?.email}
         />
 
         {/* Scrollable content area */}

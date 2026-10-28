@@ -2,13 +2,14 @@
 
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { createAppointment } from "@/lib/appointments";
 
 export function AppointmentForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [concern, setConcern] = useState("");
   const [timeSlot, setTimeSlot] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{
     name?: string;
     phone?: string;
@@ -30,7 +31,7 @@ export function AppointmentForm() {
     "General Consultation",
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const nextErrors: {
@@ -67,32 +68,26 @@ export function AppointmentForm() {
       return;
     }
 
-    // Create appointment object
-    const newAppointment = {
-      id: `appt-${Date.now()}`,
-      patientName: name.trim(),
-      phone: phone.trim(),
-      concern: concern,
-      timeSlot: timeSlot as "Morning" | "Evening" | "Night",
-      status: "Pending" as const,
-    };
-
+    setIsSubmitting(true);
     try {
-      const existing = localStorage.getItem("dermverse-dashboard-apps");
-      const list = existing ? JSON.parse(existing) : [];
-      const updated = [newAppointment, ...list];
-      localStorage.setItem("dermverse-dashboard-apps", JSON.stringify(updated));
-      window.dispatchEvent(new Event("storage"));
-      window.dispatchEvent(new CustomEvent("dermverse:appointment-added", { detail: newAppointment }));
-    } catch (err) {
-      console.error("Could not save appointment to storage:", err);
-    }
+      await createAppointment({
+        patientName: name.trim(),
+        phone: phone.trim(),
+        concern: concern,
+        timeSlot: timeSlot as "Morning" | "Evening" | "Night",
+        status: "Pending",
+      });
 
-    setShowSuccess(true);
-    setName("");
-    setPhone("");
-    setConcern("");
-    setTimeSlot("");
+      setShowSuccess(true);
+      setName("");
+      setPhone("");
+      setConcern("");
+      setTimeSlot("");
+    } catch (err) {
+      console.error("Could not save appointment:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClasses =
@@ -238,8 +233,12 @@ export function AppointmentForm() {
       </div>
 
       {/* Submit */}
-      <button type="submit" className="w-full">
-        Submit Appointment Request
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className={cn("w-full", isSubmitting && "opacity-70 cursor-not-allowed")}
+      >
+        {isSubmitting ? "Submitting Request..." : "Submit Appointment Request"}
       </button>
 
       {showSuccess && (

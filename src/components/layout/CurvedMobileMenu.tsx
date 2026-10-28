@@ -6,8 +6,22 @@ import { clinic } from "@/data/clinic";
 import { Phone, MessageCircle, MapPin } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useSyncExternalStore, type RefObject } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+
+function subscribeReducedMotion(callback: () => void) {
+  const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mediaQuery.addEventListener("change", callback);
+  return () => mediaQuery.removeEventListener("change", callback);
+}
+
+function getReducedMotionSnapshot() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function getReducedMotionServerSnapshot() {
+  return false;
+}
 
 interface CurvedMobileMenuProps {
   isOpen: boolean;
@@ -18,17 +32,11 @@ interface CurvedMobileMenuProps {
 export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMenuProps) {
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setShouldReduceMotion(mediaQuery.matches);
-    const handleChange = (e: MediaQueryListEvent) => {
-      setShouldReduceMotion(e.matches);
-    };
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
+  const shouldReduceMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot
+  );
 
   useEffect(() => {
     if (!isOpen) return;
