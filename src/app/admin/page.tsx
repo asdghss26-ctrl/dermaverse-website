@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Appointment, sampleAppointments } from "@/data/appointments";
+import { Appointment } from "@/data/appointments";
 import { auth, isFirebaseConfigured } from "@/lib/firebase";
 import {
   signInWithEmailAndPassword,
@@ -459,7 +459,7 @@ function TopBar({
           style={{ borderColor: T.border, color: T.secondary }}
         >
           <RefreshCw className="h-3.5 w-3.5" />
-          <span className="hidden md:inline">Reset Demo Data</span>
+          <span className="hidden md:inline">Refresh</span>
         </button>
 
         <button
@@ -974,9 +974,7 @@ export default function AdminDashboard() {
   const [authLoading, setAuthLoading] = useState(() => isFirebaseConfigured());
 
   /* -- Dashboard State ---------------------------------------------- */
-  const [appointments, setAppointments] = useState<Appointment[]>(() =>
-    sampleAppointments.map((a) => ({ ...a }))
-  );
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("kanban");
@@ -1089,14 +1087,8 @@ export default function AdminDashboard() {
   );
 
   const handleResetData = useCallback(() => {
-    const fresh = sampleAppointments.map((a) => ({ ...a }));
-    setAppointments(fresh);
-    try {
-      localStorage.setItem("dermverse-dashboard-apps", JSON.stringify(fresh));
-    } catch {
-      // ignore
-    }
-    showToast("Restored demo sample appointments");
+    setAppointments([]);
+    showToast("All local appointments cleared");
   }, [showToast]);
 
   const handleLogout = useCallback(async () => {
