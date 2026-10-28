@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   addDoc,
+  getDocs,
   updateDoc,
   deleteDoc,
   onSnapshot,
@@ -38,13 +39,43 @@ export async function createAppointment(
       );
       return docRef.id;
     } catch (err) {
-      console.warn("Firestore write failed:", err);
+      console.error("Firestore write failed:", err);
+      throw err;
     }
   }
 
   // Fallback ID for offline scenarios
   const fallbackId = `appt-${Date.now()}`;
   return fallbackId;
+}
+
+/**
+ * Fetches all appointments once from Cloud Firestore.
+ */
+export async function getAppointments(): Promise<Appointment[]> {
+  if (!isFirebaseConfigured()) return [];
+
+  try {
+    const q = query(
+      collection(db, APPOINTMENTS_COLLECTION),
+      orderBy("createdAt", "desc")
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((docSnap) => {
+      const d = docSnap.data();
+      return {
+        id: docSnap.id,
+        patientName: d.patientName || "Anonymous",
+        phone: d.phone || "",
+        concern: d.concern || "General Consultation",
+        timeSlot: d.timeSlot || "Morning",
+        status: d.status || "Pending",
+      };
+    });
+  } catch (err) {
+    console.warn("Failed to fetch appointments:", err);
+    return [];
+  }
 }
 
 /**

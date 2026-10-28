@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 import {
   subscribeAppointments,
+  getAppointments,
   updateAppointmentStatus,
   deleteAppointment as deleteFirestoreAppointment,
   createAppointment as createFirestoreAppointment,
@@ -409,14 +410,18 @@ function Sidebar({
 interface TopBarProps {
   onMenuClick: () => void;
   onOpenAddModal: () => void;
-  onResetData: () => void;
+  onRefresh: () => void;
+  onLogout: () => void;
+  refreshing?: boolean;
   userEmail?: string | null;
 }
 
 function TopBar({
   onMenuClick,
   onOpenAddModal,
-  onResetData,
+  onRefresh,
+  onLogout,
+  refreshing,
   userEmail,
 }: TopBarProps) {
   return (
@@ -455,12 +460,13 @@ function TopBar({
 
       <div className="flex items-center gap-2 sm:gap-3">
         <button
-          onClick={onResetData}
-          title="Restore sample demo appointments"
-          className="flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[12px] font-medium transition-colors hover:bg-slate-50 cursor-pointer"
+          onClick={onRefresh}
+          disabled={refreshing}
+          title="Refresh appointments from database"
+          className="flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[12px] font-medium transition-colors hover:bg-slate-50 cursor-pointer disabled:opacity-50"
           style={{ borderColor: T.border, color: T.secondary }}
         >
-          <RefreshCw className="h-3.5 w-3.5" />
+          <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin")} />
           <span className="hidden md:inline">Refresh</span>
         </button>
 
@@ -485,6 +491,15 @@ function TopBar({
             {userEmail ? userEmail.split("@")[0] : "Dr. Jansi"}
           </span>
         </div>
+
+        <button
+          onClick={onLogout}
+          title="Sign Out of Doctor Dashboard"
+          className="flex items-center gap-1.5 rounded-md border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 px-2.5 py-1.5 text-[12px] font-medium transition-colors cursor-pointer"
+        >
+          <LogOut className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">Sign Out</span>
+        </button>
       </div>
     </header>
   );
@@ -1088,15 +1103,26 @@ export default function AdminDashboard() {
     [showToast]
   );
 
-  const handleResetData = useCallback(() => {
-    setAppointments([]);
-    showToast("All local appointments cleared");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const items = await getAppointments();
+      setAppointments(items);
+      showToast(`Refreshed: ${items.length} appointment${items.length === 1 ? "" : "s"}`);
+    } catch {
+      showToast("Failed to refresh appointments");
+    } finally {
+      setRefreshing(false);
+    }
   }, [showToast]);
 
   const handleLogout = useCallback(async () => {
     try {
       await signOut(auth);
       setCurrentUser(null);
+      setAppointments([]);
       showToast("Signed out of Doctor Dashboard");
     } catch {
       // ignore
@@ -1219,7 +1245,9 @@ export default function AdminDashboard() {
         <TopBar
           onMenuClick={() => setSidebarOpen(true)}
           onOpenAddModal={() => setAddModalOpen(true)}
-          onResetData={handleResetData}
+          onRefresh={handleRefresh}
+          onLogout={handleLogout}
+          refreshing={refreshing}
           userEmail={currentUser?.email}
         />
 

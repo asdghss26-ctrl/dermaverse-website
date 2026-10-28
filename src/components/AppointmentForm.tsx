@@ -88,6 +88,10 @@ export function AppointmentForm() {
       setTimeSlot("");
     } catch (err) {
       console.error("Could not save appointment:", err);
+      setErrors({
+        phone: "Could not submit appointment. Please check your connection or contact the clinic directly.",
+      });
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     } finally {
       setIsSubmitting(false);
     }
