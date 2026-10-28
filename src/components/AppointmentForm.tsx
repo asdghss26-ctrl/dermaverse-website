@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { createAppointment } from "@/lib/appointments";
+import { Button } from "@/components/ui/Button";
 
 export function AppointmentForm() {
   const [name, setName] = useState("");
@@ -233,13 +234,31 @@ export function AppointmentForm() {
       </div>
 
       {/* Submit */}
-      <button
+      <Button
         type="submit"
+        variant="primary"
+        size="lg"
         disabled={isSubmitting}
-        className={cn("w-full", isSubmitting && "opacity-70 cursor-not-allowed")}
+        className={cn("w-full mt-2", isSubmitting && "opacity-70 cursor-not-allowed")}
       >
-        {isSubmitting ? "Submitting Request..." : "Submit Appointment Request"}
-      </button>
+        {isSubmitting ? (
+          <>
+            <svg
+              className="h-4 w-4 animate-spin"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            Submitting Request…
+          </>
+        ) : (
+          "Submit Appointment Request"
+        )}
+      </Button>
 
       {showSuccess && (
         <div className="mt-4 p-4 rounded-md border border-emerald-300 bg-emerald-50 text-emerald-900 text-sm">
