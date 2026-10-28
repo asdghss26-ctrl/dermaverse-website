@@ -1,87 +1,375 @@
 @import "tailwindcss";
 
-/* ============================================================
-   EMERALD & GOLD CLINIC — Design Tokens (Tailwind v4)
-   All palette, typography, spacing and radius tokens live here.
-   ============================================================ */
-
 @theme inline {
-  /* ── Palette ────────────────────────────────────────────── */
-  --color-emerald-brand: #1F5C46;
-  --color-emerald-deep: #143D2E;
-  --color-gold: #C9A45C;           /* TODO: replace with exact logo hex */
-  --color-gold-light: #EBDDB0;
-  --color-ivory: #FFFBF5;
-  --color-sage: #E6EFE8;
-  --color-charcoal: #23303A;
-  --color-oak: #B07A47;            /* tiny accent only */
-  --color-white: #FFFFFF;
-  --color-black: #000000;
+  /* Palette */
+  --color-cream: #fff8f5;
+  --color-taupe-soft: #efe7e0;
+  --color-taupe: #d8cbc2;
+  --color-sand: #a18267;
+  --color-sand-strong: #7a5f47;
+  --color-olive: #3b3418;
+  --color-brown: #2d241b;
 
   /* Semantic aliases */
-  --color-background: var(--color-ivory);
-  --color-foreground: var(--color-charcoal);
-  --color-primary: var(--color-gold);
-  --color-primary-text: var(--color-emerald-deep);
-  --color-secondary: var(--color-emerald-brand);
-  --color-section-alt: var(--color-sage);
-  --color-footer: var(--color-emerald-deep);
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-brown);
+  --color-primary: var(--color-brown);
+  --color-primary-text: var(--color-cream);
+  --color-secondary: var(--color-olive);
+  --color-section-alt: var(--color-taupe-soft);
+  --color-footer: var(--color-olive);
 
-  /* ── Typography ─────────────────────────────────────────── */
-  --font-heading: var(--font-cormorant);
-  --font-body: var(--font-dm-sans);
+  /* Typography */
+  --font-display: var(--font-bodoni);
+  --font-sans: var(--font-jost);
 
-  /* ── Radius ─────────────────────────────────────────────── */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  /* Back-compat aliases */
+  --font-heading: var(--font-bodoni);
+  --font-body: var(--font-jost);
+
+  /* Radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
   --radius-pill: 9999px;
 
-  /* ── Shadows ────────────────────────────────────────────── */
-  --shadow-card: 0 2px 12px rgba(31, 92, 70, 0.06);
-  --shadow-card-hover: 0 4px 20px rgba(31, 92, 70, 0.10);
-  --shadow-nav: 0 1px 8px rgba(0, 0, 0, 0.06);
+  /* Shadows */
+  --shadow-card: 0 1px 0 rgb(45 36 27 / 0.05);
+  --shadow-card-hover: 0 28px 50px -34px rgb(45 36 27 / 0.4);
+  --shadow-nav: 0 1px 0 rgb(45 36 27 / 0.1);
+  --shadow-bar: 0 -2px 10px rgb(45 36 27 / 0.18);
 }
 
-/* ── Base styles ──────────────────────────────────────────── */
+/* Base styles */
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--header-h);
+}
+
+.site-container {
+  width: min(calc(100% - 64px), 1200px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+:root {
+  --header-h: 68px;
 }
 
 body {
-  background-color: var(--color-ivory);
-  color: var(--color-charcoal);
-  font-family: var(--font-body), system-ui, sans-serif;
-  line-height: 1.6;
+  background-color: var(--color-cream);
+  color: var(--color-brown);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.1vw, 18px);
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), Georgia, serif;
-  line-height: 1.2;
-  font-weight: 600;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display), Didot, Georgia, serif;
+  line-height: 1.02;
+  font-weight: 400;
+  letter-spacing: -0.015em;
 }
 
-/* ── Focus styles (keyboard only) ─────────────────────────── */
+/* Keep explicit bold/semibold utilities from over-thickening Didot */
+h1.font-heading,
+h2.font-heading,
+h3.font-heading,
+h4.font-heading {
+  font-weight: 400;
+}
+
+::selection {
+  background: var(--color-brown);
+  color: var(--color-cream);
+}
+
+/* Editorial utilities */
+.eyebrow {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.display-xl {
+  font-family: var(--font-display), Didot, Georgia, serif;
+  font-size: clamp(44px, 5.6vw, 88px);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.display-lg {
+  font-family: var(--font-display), Didot, Georgia, serif;
+  font-size: clamp(34px, 4.2vw, 60px);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.display-md {
+  font-family: var(--font-display), Didot, Georgia, serif;
+  font-size: clamp(34px, 4.2vw, 60px);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+  .display-lg {
+    font-size: clamp(2rem, 9.5vw, 2.5rem);
+  }
+
+  .hero-headline {
+    font-size: clamp(1.75rem, 7.8vw, 2.75rem);
+    letter-spacing: -0.03em;
+  }
+
+  .text-sm {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  p.text-xs,
+  li.text-xs {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+}
+
+.editorial-media {
+  background:
+    radial-gradient(
+      120% 90% at 18% 0%,
+      color-mix(in srgb, var(--color-taupe) 75%, var(--color-cream)) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      110% 90% at 85% 100%,
+      color-mix(in srgb, var(--color-sand) 35%, var(--color-taupe-soft)) 0%,
+      transparent 62%
+    ),
+    linear-gradient(155deg, var(--color-taupe-soft) 0%, var(--color-taupe) 100%);
+}
+
+.editorial-media-deep {
+  background:
+    radial-gradient(
+      110% 90% at 20% 0%,
+      color-mix(in srgb, var(--color-sand) 55%, var(--color-brown)) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      100% 80% at 90% 100%,
+      var(--color-brown) 0%,
+      transparent 60%
+    ),
+    linear-gradient(160deg, var(--color-sand-strong) 0%, var(--color-olive) 100%);
+}
+
+.arch {
+  border-radius: 999px 999px 0 0;
+}
+
+.hero-placeholder {
+  background: linear-gradient(
+    70deg,
+    var(--color-brown) 0%,
+    var(--color-olive) 64%,
+    var(--color-olive) 86%,
+    var(--color-taupe) 98%,
+    var(--color-sand) 100%
+  );
+}
+
+.hero-placeholder--skin {
+  background: linear-gradient(
+    65deg,
+    var(--color-brown) 0%,
+    var(--color-olive) 58%,
+    var(--color-taupe) 88%,
+    var(--color-sand) 100%
+  );
+}
+
+.hero-placeholder--hair {
+  background: linear-gradient(
+    110deg,
+    var(--color-olive) 0%,
+    var(--color-brown) 42%,
+    var(--color-taupe) 78%,
+    var(--color-sand-strong) 100%
+  );
+}
+
+.hero-placeholder--laser {
+  background: linear-gradient(
+    150deg,
+    var(--color-brown) 0%,
+    var(--color-olive) 36%,
+    color-mix(in srgb, var(--color-taupe) 82%, var(--color-sand)) 76%,
+    var(--color-sand) 100%
+  );
+}
+
+.hero-placeholder--confidence {
+  background: linear-gradient(
+    25deg,
+    var(--color-sand-strong) 0%,
+    var(--color-taupe) 46%,
+    var(--color-olive) 82%,
+    var(--color-brown) 100%
+  );
+}
+
+.hero-media-scrim {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-brown) 95%, transparent) 0%,
+    color-mix(in srgb, var(--color-brown) 85%, transparent) 50%,
+    color-mix(in srgb, var(--color-brown) 25%, transparent) 100%
+  );
+}
+
+.hero-skin-ground {
+  background: linear-gradient(
+    70deg,
+    var(--color-brown) 0%,
+    var(--color-olive) 68%,
+    var(--color-olive) 100%
+  );
+}
+
+.hero-mobile-scrim {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-brown) 96%, transparent) 0%,
+    color-mix(in srgb, var(--color-brown) 82%, transparent) 45%,
+    transparent 70%
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-placeholder {
+    background: linear-gradient(
+      70deg,
+      var(--color-brown) 0%,
+      var(--color-olive) 60%,
+      var(--color-taupe) 82%,
+      var(--color-sand) 100%
+    );
+  }
+
+  .hero-media-scrim {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-brown) 75%, transparent) 0%,
+      color-mix(in srgb, var(--color-brown) 75%, transparent) 35%,
+      color-mix(in srgb, var(--color-brown) 50%, transparent) 50%,
+      transparent 65%
+    );
+  }
+
+  .hero-skin-media {
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      #000 25%
+    );
+    mask-image: linear-gradient(90deg, transparent 0%, #000 25%);
+  }
+}
+
+.arch-glow {
+  background: radial-gradient(
+    circle at 50% 42%,
+    color-mix(in srgb, var(--color-taupe) 75%, transparent) 0%,
+    color-mix(in srgb, var(--color-taupe) 25%, transparent) 46%,
+    transparent 72%
+  );
+}
+
+.hairline {
+  border-color: color-mix(in srgb, var(--color-taupe) 70%, transparent);
+}
+
+.hero-progress-fill {
+  transform-origin: left;
+  animation: hero-progress 6s linear forwards;
+}
+
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .hero-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .hero-progress-fill {
+    animation: none !important;
+    transform: scaleX(1) !important;
+  }
+}
+
+/* Focus styles (keyboard only) */
 *:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--color-brown);
   outline-offset: 2px;
-  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--color-cream);
 }
 
-/* ── Skip-to-content link ─────────────────────────────────── */
+.treatment-chip:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.treatment-scroller:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+/* Skip-to-content link */
 .skip-link {
   position: absolute;
   top: -100%;
   left: 16px;
   z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 8px 16px;
-  background: var(--color-gold);
-  color: var(--color-emerald-deep);
-  font-weight: 600;
+  background: var(--color-brown);
+  color: var(--color-cream);
+  font-weight: 500;
   border-radius: var(--radius-pill);
   transition: top 200ms ease;
 }
@@ -89,7 +377,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 16px;
 }
 
-/* ── Utility: hide scrollbar for horizontal snap rows ──── */
+/* Hide scrollbar for horizontal snap rows */
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -98,14 +386,14 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-/* ── Dev-only SAMPLE badge ─────────────────────────────── */
+/* Sample content badge */
 .sample-badge {
   position: absolute;
   top: 8px;
   right: 8px;
   padding: 2px 8px;
-  background: #ef4444;
-  color: white;
+  background: var(--color-olive);
+  color: var(--color-cream);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -113,14 +401,21 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 10;
   pointer-events: none;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-/* ── Watercolor blob decoration ────────────────────────── */
+/* Soft taupe decorative glow */
 .watercolor-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.12;
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--color-taupe) 85%, transparent) 0%,
+    color-mix(in srgb, var(--color-taupe) 35%, transparent) 45%,
+    transparent 70%
+  );
+  filter: blur(70px);
+  opacity: 0.35;
   pointer-events: none;
   z-index: 0;
 }

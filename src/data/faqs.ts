@@ -1,4 +1,4 @@
-/** faqs.ts — Frequently asked questions. Generic, non-promissory wording. */
+/** faqs.ts: Frequently asked questions. Generic, non-promissory wording. */
 
 export interface FAQ {
   question: string;
@@ -22,13 +22,13 @@ export const faqs: FAQ[] = [
   {
     question: "How long does a consultation usually take?",
     answer:
-      "A typical first consultation takes 20–30 minutes, allowing time for a thorough assessment and discussion of your treatment plan.",
+      "A typical first consultation takes 20 to 30 minutes, allowing time for a thorough assessment and discussion of your treatment plan.",
     placeholder: true,
   },
   {
     question: "Is parking available at the clinic?",
     answer:
-      "Yes, ample car parking is available at the clinic premises for your convenience.",
+      "Yes, parking is available at the clinic premises for your convenience.",
     placeholder: true,
   },
   {

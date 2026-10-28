@@ -1,30 +1,20 @@
 import type { Metadata } from "next";
-import { clinic } from "@/data/clinic";
+import { clinic, directionsUrl } from "@/data/clinic";
 import { Section } from "@/components/ui/Section";
-import { Button } from "@/components/ui/Button";
 import { Phone, MessageCircle, MapPin, Car, Clock } from "lucide-react";
 import Link from "next/link";
 import { LocalBusinessJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: `Contact ${clinic.fullName} in Adyar, Chennai. Call, WhatsApp or visit us — ample parking available.`,
+  description: `Contact ${clinic.fullName} in Adyar, Chennai. Call, WhatsApp or visit us. Parking available.`,
   openGraph: {
     title: `Contact | ${clinic.fullName}`,
-    description: `Contact ${clinic.fullName} in Adyar, Chennai. Call, WhatsApp or visit us — ample parking available.`,
+    description: `Contact ${clinic.fullName} in Adyar, Chennai. Call, WhatsApp or visit us. Parking available.`,
     url: "/contact",
     siteName: clinic.fullName,
     locale: "en_IN",
     type: "website",
-    // TODO: client to supply a share image (og-image.jpg)
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: `Contact ${clinic.fullName}`,
-      },
-    ],
   },
 };
 
@@ -33,12 +23,13 @@ export default function ContactPage() {
     <>
       <LocalBusinessJsonLd />
 
-      <Section background="ivory" className="pt-8 pb-10 md:pt-16 md:pb-14">
+      <Section background="cream" className="pt-8 pb-10 md:pt-16 md:pb-14">
         <div className="text-center mb-10">
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal mb-3">
+          <p className="eyebrow mb-4 text-sand-strong">Get in touch</p>
+          <h1 className="display-lg text-brown mb-3">
             Contact Us
           </h1>
-          <p className="text-charcoal/60 max-w-md mx-auto">
+          <p className="text-brown max-w-md mx-auto">
             We&apos;d love to hear from you. Reach out by phone, WhatsApp or
             visit us in person.
           </p>
@@ -48,44 +39,41 @@ export default function ContactPage() {
           {/* Contact details */}
           <div className="space-y-6">
             {/* Address */}
-            <div className="bg-white rounded-2xl p-6 shadow-[var(--shadow-card)]">
-              <h2 className="font-heading text-xl font-semibold text-charcoal mb-4">
+            <div className="border border-sand bg-cream p-6">
+              <h2 className="font-heading text-2xl text-brown mb-4">
                 Clinic Address
               </h2>
-              <div className="space-y-3 text-sm text-charcoal/70">
+              <div className="space-y-3 text-sm text-brown">
                 <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-gold mt-0.5 shrink-0" />
+                  <MapPin className="h-5 w-5 text-sand mt-0.5 shrink-0" />
                   <p>{clinic.address.full}</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Car className="h-5 w-5 text-gold mt-0.5 shrink-0" />
+                  <Car className="h-5 w-5 text-sand mt-0.5 shrink-0" />
                   <p>{clinic.address.parking}</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Clock className="h-5 w-5 text-gold mt-0.5 shrink-0" />
-                  {/* TODO: confirm opening hours with client */}
-                  <p className="italic text-charcoal/40">
-                    Opening hours — to be confirmed
-                  </p>
+                  <Clock className="h-5 w-5 text-sand mt-0.5 shrink-0" />
+                  <p className="text-sand-strong">{clinic.hours}</p>
                 </div>
               </div>
             </div>
 
             {/* Contact methods */}
-            <div className="bg-white rounded-2xl p-6 shadow-[var(--shadow-card)]">
-              <h2 className="font-heading text-xl font-semibold text-charcoal mb-4">
+            <div className="border border-sand bg-cream p-6">
+              <h2 className="font-heading text-2xl text-brown mb-4">
                 Get in Touch
               </h2>
               <div className="space-y-4">
                 <a
                   href={clinic.phone.href}
-                  className="flex items-center gap-3 text-charcoal/70 hover:text-emerald-brand transition-colors duration-200"
+                  className="flex items-center gap-3 text-brown hover:text-brown transition-colors duration-200"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/15 shrink-0">
-                    <Phone className="h-5 w-5 text-gold" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-taupe/60 shrink-0">
+                    <Phone className="h-5 w-5 text-sand-strong" />
                   </div>
                   <div>
-                    <p className="text-xs text-charcoal/50">Call us</p>
+                    <p className="text-xs text-sand-strong">Call us</p>
                     <p className="font-semibold text-base">{clinic.phone.display}</p>
                   </div>
                 </a>
@@ -94,14 +82,14 @@ export default function ContactPage() {
                   href={clinic.whatsapp.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-charcoal/70 hover:text-emerald-brand transition-colors duration-200"
+                  className="flex items-center gap-3 text-brown hover:text-brown transition-colors duration-200"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/15 shrink-0">
-                    <MessageCircle className="h-5 w-5 text-gold" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-taupe/60 shrink-0">
+                    <MessageCircle className="h-5 w-5 text-sand-strong" />
                   </div>
                   <div>
                     {/* TODO: confirm WhatsApp number with client */}
-                    <p className="text-xs text-charcoal/50">WhatsApp</p>
+                    <p className="text-xs text-sand-strong">WhatsApp</p>
                     <p className="font-semibold text-base">{clinic.whatsapp.display}</p>
                   </div>
                 </a>
@@ -110,9 +98,9 @@ export default function ContactPage() {
               <div className="mt-6">
                 <Link
                   href="/book"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-brand hover:text-gold transition-colors duration-200"
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brown transition-colors duration-200 hover:text-sand-strong"
                 >
-                  Or book a consultation online →
+                  Or book a consultation online
                 </Link>
               </div>
             </div>
@@ -120,18 +108,26 @@ export default function ContactPage() {
 
           {/* Map */}
           <div>
-            <div className="bg-white rounded-2xl p-6 shadow-[var(--shadow-card)]">
-              <h2 className="font-heading text-xl font-semibold text-charcoal mb-4">
+            <div className="border border-sand bg-cream p-6">
+              <h2 className="font-heading text-2xl text-brown mb-4">
                 Find Us
               </h2>
-              {/* TODO: embed Google Maps iframe with clinic location */}
-              <div className="rounded-xl bg-sage h-64 md:h-80 flex items-center justify-center text-sm text-charcoal/40">
-                Map placeholder — TODO: embed Google Maps
-              </div>
-              <p className="mt-3 text-xs text-charcoal/50">
-                {clinic.address.line1}, {clinic.address.line2},{" "}
-                {clinic.address.city} {clinic.address.pincode}
+              {/* TODO: embed Google Maps iframe when client confirms location */}
+              <p className="text-sm leading-relaxed text-brown">
+                {clinic.address.full}
               </p>
+              <p className="mt-2 text-xs text-sand-strong">
+                {clinic.address.parking}
+              </p>
+              <a
+                href={directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-sand-strong underline underline-offset-4 transition-colors duration-200 hover:text-brown"
+              >
+                <MapPin className="h-4 w-4" aria-hidden="true" />
+                Get directions
+              </a>
             </div>
           </div>
         </div>

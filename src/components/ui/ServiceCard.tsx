@@ -1,63 +1,99 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
-import * as LucideIcons from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import {
+  Baby,
+  Clock,
+  Droplets,
+  Leaf,
+  Microscope,
+  ScanFace,
+  Scissors,
+  Sun,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+import Link from "next/link";
 
 interface ServiceCardProps {
   title: string;
   description: string;
   icon: string;
   href: string;
+  imageUrl?: string;
+  index?: number;
   className?: string;
 }
+
+const iconMap: Record<string, LucideIcon> = {
+  Baby,
+  Clock,
+  Droplets,
+  Leaf,
+  Microscope,
+  ScanFace,
+  Scissors,
+  Sun,
+  Zap,
+};
 
 export function ServiceCard({
   title,
   description,
   icon,
   href,
+  imageUrl,
   className,
 }: ServiceCardProps) {
-  // Dynamically resolve lucide icon
-  const IconComponent = (LucideIcons as unknown as Record<string, LucideIcon>)[icon] || LucideIcons.Sparkles;
+  const IconComponent = iconMap[icon];
 
   return (
-    <article
-      className={cn(
-        "group relative flex flex-col bg-white rounded-xl overflow-hidden",
-        "shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]",
-        "transition-shadow duration-200 ease-in-out",
-        "border-t-2 border-gold",
-        className
-      )}
-    >
-      <div className="flex flex-col flex-1 p-6">
-        {/* Icon */}
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gold/15">
-          <IconComponent className="h-6 w-6 text-gold" strokeWidth={1.5} />
+    <article className={cn("group relative", className)}>
+      <Link href={href} className="block">
+        <div className="editorial-media relative aspect-[4/5] overflow-hidden rounded-md border border-sand shadow-xs transition-all duration-300 group-hover:border-sand-strong group-hover:shadow-md">
+          {imageUrl && (
+            <>
+              <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-brown/75 via-brown/20 to-transparent"
+                aria-hidden="true"
+              />
+            </>
+          )}
+
+          {/* Badge Icon */}
+          {IconComponent && (
+            <div
+              className={cn(
+                "absolute z-10 transition-transform duration-300",
+                imageUrl
+                  ? "right-4 top-4 rounded-full bg-cream/90 p-2 text-brown shadow-xs backdrop-blur-xs group-hover:scale-110"
+                  : "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-brown/25 group-hover:scale-110"
+              )}
+            >
+              <IconComponent
+                className={imageUrl ? "h-4 w-4 text-sand-strong" : "h-16 w-16"}
+                strokeWidth={imageUrl ? 1.5 : 0.75}
+                aria-hidden="true"
+              />
+            </div>
+          )}
         </div>
 
-        {/* Title */}
-        <h3 className="font-heading text-xl font-semibold text-charcoal mb-2">
-          {title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-sm text-charcoal/70 leading-relaxed flex-1">
-          {description}
-        </p>
-
-        {/* Link */}
-        <a
-          href={href}
-          className={cn(
-            "mt-4 inline-flex items-center gap-1 text-sm font-semibold text-emerald-brand",
-            "hover:text-gold transition-colors duration-200"
-          )}
-        >
-          Book consultation
-          <LucideIcons.ArrowRight className="h-4 w-4" />
-        </a>
-      </div>
+        <div className="pt-4">
+          <h3 className="font-heading text-xl uppercase leading-tight tracking-wide text-brown transition-colors duration-300 group-hover:text-sand-strong">
+            {title}
+          </h3>
+          <p className="mt-1.5 text-sm leading-relaxed text-brown md:line-clamp-2">
+            {description}
+          </p>
+        </div>
+      </Link>
     </article>
   );
 }

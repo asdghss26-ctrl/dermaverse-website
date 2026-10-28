@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
-export type BadgeVariant = "gold" | "emerald" | "sage" | "outline";
+export type BadgeVariant = "sand" | "olive" | "outline";
 
 interface BadgeProps {
   variant?: BadgeVariant;
@@ -10,17 +10,17 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  gold: "bg-gold text-emerald-deep",
-  emerald: "bg-emerald-brand text-white",
-  sage: "bg-sage text-emerald-brand",
-  outline: "bg-transparent text-emerald-brand border border-emerald-brand",
+  sand: "bg-taupe-soft text-brown border border-sand-strong",
+  olive: "bg-olive text-taupe",
+  outline: "bg-transparent text-brown border border-sand",
 };
 
-export function Badge({ variant = "gold", className, children }: BadgeProps) {
+export function Badge({ variant = "sand", className, children }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold tracking-wide",
+        "inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full",
+        "text-[10px] font-medium uppercase tracking-[0.14em]",
         variantStyles[variant],
         className
       )}

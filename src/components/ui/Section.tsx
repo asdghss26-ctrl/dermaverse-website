@@ -1,46 +1,49 @@
 "use client";
 
-import { cn, isDev } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
-export type SectionBackground = "ivory" | "sage" | "emerald" | "deep-emerald";
+export type SectionBackground = "cream" | "taupe" | "olive";
 
 interface SectionProps {
   id?: string;
   background?: SectionBackground;
   className?: string;
   children: ReactNode;
-  /** Show SAMPLE badge in dev mode */
+  /** Show the sample content label */
   hasPlaceholderData?: boolean;
   /** Accessible label for the section */
   ariaLabel?: string;
 }
 
 const bgStyles: Record<SectionBackground, string> = {
-  ivory: "bg-ivory text-charcoal",
-  sage: "bg-sage text-charcoal",
-  emerald: "bg-emerald-brand text-white",
-  "deep-emerald": "bg-emerald-deep text-white",
+  cream: "bg-cream text-brown",
+  taupe: "bg-taupe-soft text-brown",
+  olive: "bg-olive text-taupe",
 };
 
 export function Section({
   id,
-  background = "ivory",
+  background = "cream",
   className,
   children,
   hasPlaceholderData = false,
   ariaLabel,
 }: SectionProps) {
-  const showBadge = hasPlaceholderData && isDev();
+  const showBadge = hasPlaceholderData;
 
   return (
     <section
       id={id}
       aria-label={ariaLabel}
-      className={cn("relative py-16 px-4 md:py-20 md:px-6 lg:py-24", bgStyles[background], className)}
+      className={cn(
+        "relative py-12 md:py-[clamp(56px,8vh,96px)]",
+        bgStyles[background],
+        className
+      )}
     >
-      {showBadge && <span className="sample-badge">SAMPLE</span>}
-      <div className="mx-auto max-w-6xl">{children}</div>
+      {showBadge && <span className="sample-badge">Sample content</span>}
+      <div className="site-container">{children}</div>
     </section>
   );
 }

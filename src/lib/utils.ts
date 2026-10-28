@@ -1,4 +1,4 @@
-/** utils.ts — Shared helpers */
+/** utils.ts: Shared helpers */
 
 /** Merge class names, filtering out falsy values */
 export function cn(...classes: (string | false | null | undefined)[]): string {

@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
-
-// TODO: replace with actual domain when deployed
-const BASE_URL = "https://dermverse.in";
+import { SITE_URL } from "@/data/clinic";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dr. Jansi's Dermverse
 
-## Getting Started
+Marketing site for Dr. Jansi's Dermverse, a dermatology clinic in Adyar, Chennai. The site presents clinic information, services, FAQs, and a WhatsApp booking flow.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS v4 with the Turbopack integration
+- next/font/google: Bodoni Moda for display type, Jost for body type
+- framer-motion for restrained entrance motion
+- lucide-react for interface icons
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
 
-## Learn More
+Run the production build locally with:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content and configuration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Clinic details, contact links, hours, and placeholder flags live in `src/data/clinic.ts`.
+- `SITE_URL` in `src/data/clinic.ts` is the single source for canonical URLs, robots, sitemap, and JSON-LD.
+- Placeholder content is flagged in the data files and should be replaced only after client confirmation.
+- The visual system and motion rules are documented in `DESIGN.md`.
 
-## Deploy on Vercel
+## Before launch
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Confirm these client inputs before removing placeholders:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Confirmed doctor portrait
+- Verified services, FAQs, and clinic gallery copy
+- Google Business Profile link
+- Parking details
+- Map location for directions or embed
+- Open Graph share image and logo files
+- Production domain for `SITE_URL`

@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/Button";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { Badge } from "@/components/ui/Badge";
 import { MessageCircle, ArrowLeft } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+
+/** Render blocking so the dynamic route can read params without a Suspense shell. */
+export const instant = false;
 
 /** Pre-generate all service slugs at build time */
 export function generateStaticParams() {
@@ -57,48 +61,63 @@ export default async function ServiceDetailPage({
   return (
     <>
       {/* Breadcrumb + Header */}
-      <Section background="ivory" className="pt-6 pb-10 md:pt-12 md:pb-14">
+      <Section background="cream" className="pt-6 pb-10 md:pt-12 md:pb-14">
         <div className="max-w-3xl mx-auto">
           {/* Back link */}
           <Link
             href="/services"
-            className="inline-flex items-center gap-1 text-sm text-emerald-brand hover:text-gold transition-colors duration-200 mb-6"
+            className="mb-6 inline-flex min-h-11 items-center gap-1 text-sm text-brown transition-colors duration-200 hover:text-sand-strong"
           >
             <ArrowLeft className="h-4 w-4" />
             All services
           </Link>
 
           {/* Category badge */}
-          <Badge variant="sage" className="mb-3">
+          <Badge variant="sand" className="mb-3">
             {categoryLabels[service.category]}
           </Badge>
 
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal mb-4">
+          <h1 className="display-lg text-brown mb-4">
             {service.title}
           </h1>
-          <p className="text-charcoal/70 leading-relaxed text-lg">
+          <p className="text-brown leading-relaxed text-lg">
             {service.shortDescription}
           </p>
+
+          {service.imageUrl && (
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-md border border-sand shadow-xs mt-8">
+              <Image
+                src={service.imageUrl}
+                alt={service.title}
+                fill
+                priority
+                sizes="(min-width: 1024px) 768px, 100vw"
+                className="object-cover"
+              />
+            </div>
+          )}
         </div>
       </Section>
 
       {/* What it is */}
-      <Section background="sage" ariaLabel="What it is" hasPlaceholderData>
+      <Section background="taupe" ariaLabel="What it is" hasPlaceholderData>
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-semibold text-charcoal mb-4">
+          <h2 className="display-md text-brown mb-4">
             What It Is
           </h2>
-          <p className="text-charcoal/70 leading-relaxed">{service.whatItIs}</p>
+          <p className="text-brown leading-relaxed">
+            {service.whatItIs}
+          </p>
         </div>
       </Section>
 
       {/* Who it suits */}
-      <Section background="ivory" ariaLabel="Who it suits" hasPlaceholderData>
+      <Section background="cream" ariaLabel="Who it suits" hasPlaceholderData>
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-semibold text-charcoal mb-4">
+          <h2 className="display-md text-brown mb-4">
             Who It May Suit
           </h2>
-          <p className="text-charcoal/70 leading-relaxed">
+          <p className="text-brown leading-relaxed">
             {service.whoItSuits}
           </p>
         </div>
@@ -106,33 +125,33 @@ export default async function ServiceDetailPage({
 
       {/* What to expect */}
       <Section
-        background="sage"
+        background="taupe"
         ariaLabel="What to expect"
         hasPlaceholderData
       >
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-semibold text-charcoal mb-4">
+          <h2 className="display-md text-brown mb-4">
             What to Expect at a Visit
           </h2>
-          <p className="text-charcoal/70 leading-relaxed">
+          <p className="text-brown leading-relaxed">
             {service.whatToExpect}
           </p>
         </div>
       </Section>
 
       {/* CTA */}
-      <Section background="deep-emerald" ariaLabel="Book a consultation">
+      <Section background="olive" ariaLabel="Book a consultation">
         <div className="text-center max-w-lg mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-gold-light mb-3">
+          <h2 className="display-md text-taupe mb-3">
             Interested in {service.title}?
           </h2>
-          <p className="text-white/70 mb-6 leading-relaxed">
+          <p className="text-taupe/80 mb-6 leading-relaxed">
             Book a consultation with {clinic.doctor.shortName} to discuss
             whether this treatment may be right for you.
           </p>
           <Button
             href={clinic.whatsapp.href}
-            variant="primary"
+            variant="primary-on-dark"
             size="lg"
             external
           >
@@ -145,12 +164,12 @@ export default async function ServiceDetailPage({
       {/* Related services */}
       {related.length > 0 && (
         <Section
-          background="ivory"
+          background="cream"
           ariaLabel="Related services"
           hasPlaceholderData
         >
           <div className="max-w-3xl mx-auto">
-            <h2 className="font-heading text-2xl md:text-3xl font-semibold text-charcoal mb-6">
+            <h2 className="display-md text-brown mb-6">
               Related Services
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -160,6 +179,7 @@ export default async function ServiceDetailPage({
                   title={s.title}
                   description={s.shortDescription}
                   icon={s.icon}
+                  imageUrl={s.imageUrl}
                   href={`/services/${s.slug}`}
                 />
               ))}

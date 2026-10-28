@@ -1,4 +1,4 @@
-/** reviews.ts — ONLY real Google reviews. Do NOT invent reviewer names. */
+/** reviews.ts: ONLY real Google reviews. Do NOT invent reviewer names. */
 
 export interface Review {
   text: string;

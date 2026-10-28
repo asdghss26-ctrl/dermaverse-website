@@ -1,4 +1,4 @@
-/** navigation.ts — All navigation links in one place. */
+/** navigation.ts: All navigation links in one place. */
 
 export interface NavLink {
   label: string;

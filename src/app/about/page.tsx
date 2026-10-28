@@ -1,31 +1,27 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { clinic } from "@/data/clinic";
 import { Section } from "@/components/ui/Section";
 import { DoctorCard } from "@/components/ui/DoctorCard";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
-import { MapPin, Car, ShieldCheck, UserCheck, Sparkles } from "lucide-react";
+import { MapPin, Car, ShieldCheck, UserCheck, Leaf, ArrowUpRight } from "lucide-react";
+
+const experiencePhrase = clinic.doctor.experience
+  ? ` with ${clinic.doctor.experience} of experience`
+  : "";
+
+const aboutDescription = `Learn about ${clinic.doctor.name}, Consultant Dermatologist${experiencePhrase} offering clinical dermatology, aesthetic procedures and laser treatments in Adyar, Chennai.`;
 
 export const metadata: Metadata = {
   title: "About Dr. Jansi Priyadharshini A",
-  description: `Learn about ${clinic.doctor.name}, Consultant Dermatologist with ${clinic.doctor.experience} of experience in evidence-based clinical dermatology, aesthetic procedures and laser treatments in Adyar, Chennai.`,
+  description: aboutDescription,
   openGraph: {
     title: `About Dr. Jansi Priyadharshini A | ${clinic.fullName}`,
-    description: `Learn about ${clinic.doctor.name}, Consultant Dermatologist with ${clinic.doctor.experience} of experience in evidence-based clinical dermatology, aesthetic procedures and laser treatments in Adyar, Chennai.`,
+    description: aboutDescription,
     url: "/about",
     siteName: clinic.fullName,
     locale: "en_IN",
     type: "website",
-    // TODO: client to supply a share image (og-image.jpg)
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: `About Dr. Jansi Priyadharshini A — ${clinic.fullName}`,
-      },
-    ],
   },
 };
 
@@ -34,13 +30,14 @@ export default function AboutPage() {
     <>
       {/* Doctor profile */}
       <Section
-        background="ivory"
+        background="cream"
         className="pt-8 pb-10 md:pt-16 md:pb-14"
         ariaLabel="About the doctor"
         hasPlaceholderData={clinic.doctor.placeholder}
       >
         <div className="text-center mb-10">
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal mb-3">
+          <p className="eyebrow mb-4 text-sand-strong">The dermatologist</p>
+          <h1 className="display-lg text-brown mb-3">
             About Your Dermatologist
           </h1>
         </div>
@@ -49,6 +46,7 @@ export default function AboutPage() {
           name={clinic.doctor.name}
           title={clinic.doctor.title}
           qualifications={clinic.doctor.qualifications}
+          fellowship={clinic.doctor.fellowship}
           memberships={clinic.doctor.memberships}
           experience={clinic.doctor.experience}
           portraitUrl={clinic.doctor.portraitUrl}
@@ -56,36 +54,39 @@ export default function AboutPage() {
       </Section>
 
       {/* Bio */}
-      <Section background="sage" ariaLabel="Doctor biography" hasPlaceholderData>
+      <Section background="taupe" ariaLabel="Doctor biography" hasPlaceholderData>
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-semibold text-charcoal mb-4">
+          <h2 className="display-md text-brown mb-4">
             Background
           </h2>
-          <div className="space-y-4 text-charcoal/70 leading-relaxed">
+          <div className="space-y-4 text-brown leading-relaxed">
+            <p>{clinic.doctor.bio}</p>
+            {clinic.doctor.experience && (
+              <p>She has {clinic.doctor.experience} of clinical experience.</p>
+            )}
             <p>
-              {clinic.doctor.name} is a Consultant Dermatologist with over 10
-              years of clinical experience. She holds an MBBS, MD in
-              Dermatology, Venereology and Leprosy (DVL), and a Post-Doctoral
-              Fellowship in Aesthetic Dermatology.
+              Her qualifications include{" "}
+              {clinic.doctor.qualifications.join(", ")}
+              {clinic.doctor.fellowship
+                ? ` and ${clinic.doctor.fellowship}`
+                : ""}
+              .
             </p>
-            <p>
-              She is an active member of the Indian Association of
-              Dermatologists, Venereologists and Leprologists (IADVL) and the
-              Association of Cutaneous Surgeons of India (ACSI).
-            </p>
-            <p>
-              Her practice encompasses evidence-based clinical dermatology,
-              aesthetic procedures, dermatosurgery, paediatric skin care,
-              energy-based laser treatments and non-surgical hair restoration.
-            </p>
+            {clinic.doctor.memberships &&
+              clinic.doctor.memberships.length > 0 && (
+                <p>
+                  She is a member of{" "}
+                  {clinic.doctor.memberships.join(" and ")}.
+                </p>
+              )}
           </div>
         </div>
       </Section>
 
       {/* Philosophy */}
-      <Section background="ivory" ariaLabel="Clinic philosophy">
+      <Section background="cream" ariaLabel="Clinic philosophy">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-semibold text-charcoal mb-6">
+          <h2 className="display-md text-brown mb-6">
             Our Approach
           </h2>
 
@@ -93,8 +94,8 @@ export default function AboutPage() {
             {[
               {
                 icon: ShieldCheck,
-                title: "Evidence-Based Care",
-                desc: "Every treatment recommendation is grounded in current dermatological research and clinical evidence, ensuring you receive care that is both safe and effective.",
+                title: "Clinical Care",
+                desc: "Every recommendation is based on your skin, medical history and current clinical guidance, so the care you receive is considered and appropriate.",
               },
               {
                 icon: UserCheck,
@@ -102,20 +103,20 @@ export default function AboutPage() {
                 desc: "No two patients are the same. Each treatment plan is carefully tailored to your skin type, concerns, medical history and personal goals.",
               },
               {
-                icon: Sparkles,
-                title: "Natural-Looking Results",
+                icon: Leaf,
+                title: "Natural-Looking Care",
                 desc: "Our focus is on healthy skin and natural-looking outcomes, whether addressing acne, pigmentation, hair loss or ageing concerns.",
               },
             ].map((item) => (
               <div key={item.title} className="flex gap-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gold/15 shrink-0">
-                  <item.icon className="h-5 w-5 text-gold" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-taupe/60 shrink-0">
+                  <item.icon className="h-5 w-5 text-sand-strong" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-charcoal mb-1">
+                  <h3 className="font-semibold text-brown mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-charcoal/70 leading-relaxed">
+                  <p className="text-sm text-brown leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
@@ -127,49 +128,80 @@ export default function AboutPage() {
 
       {/* Clinic images */}
       <Section
-        background="sage"
+        background="taupe"
         ariaLabel="Clinic images"
-        hasPlaceholderData
       >
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-semibold text-charcoal mb-6">
-            Our Clinic
-          </h2>
-          {/* TODO: replace with actual clinic photos */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ImagePlaceholder
-              caption="Reception area"
-              aspectRatio="landscape"
-            />
-            <ImagePlaceholder
-              caption="Consultation room"
-              aspectRatio="landscape"
-            />
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+              <p className="eyebrow mb-2 text-sand-strong">The clinic space</p>
+              <h2 className="display-md text-brown">
+                Designed for Calm &amp; Care
+              </h2>
+            </div>
+            <Button href="/gallery" variant="ghost" size="sm">
+              View all spaces
+              <ArrowUpRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="group overflow-hidden rounded-md border border-sand bg-cream">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream">
+                <Image
+                  src="/images/clinic-reception.jpg"
+                  alt="Clinic reception area"
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="font-semibold text-sm text-brown">Welcoming Reception &amp; Lounge</p>
+                <p className="text-xs text-sand-strong mt-0.5">Gentle, private check-in with ample natural light</p>
+              </div>
+            </div>
+
+            <div className="group overflow-hidden rounded-md border border-sand bg-cream">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream">
+                <Image
+                  src="/images/clinic-consultation.jpg"
+                  alt="Private consultation room"
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="font-semibold text-sm text-brown">Private Consultation Suite</p>
+                <p className="text-xs text-sand-strong mt-0.5">Dedicated space for unhurried clinical discussion</p>
+              </div>
+            </div>
           </div>
         </div>
       </Section>
 
       {/* Visit block */}
-      <Section background="deep-emerald" ariaLabel="Visit the clinic">
+      <Section background="olive" ariaLabel="Visit the clinic">
         <div className="text-center max-w-lg mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-gold-light mb-4">
+          <h2 className="display-md text-taupe mb-4">
             Visit the Clinic
           </h2>
 
-          <div className="flex items-start justify-center gap-2 text-white/80 mb-2">
-            <MapPin className="h-5 w-5 text-gold mt-0.5 shrink-0" />
+          <div className="flex items-start justify-center gap-2 text-taupe/80 mb-2">
+            <MapPin className="h-5 w-5 text-sand mt-0.5 shrink-0" />
             <p>{clinic.address.full}</p>
           </div>
-          <div className="flex items-center justify-center gap-2 text-white/60 text-sm mb-6">
-            <Car className="h-4 w-4 text-gold shrink-0" />
+          <div className="flex items-center justify-center gap-2 text-taupe/70 text-sm mb-6">
+            <Car className="h-4 w-4 text-sand shrink-0" />
             <p>{clinic.address.parking}</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button href="/book" variant="primary" size="md">
+            <Button href="/book" variant="primary-on-dark" size="md">
               Book Consultation
             </Button>
-            <Button href="/contact" variant="secondary" size="md" className="border-white/30 text-white hover:bg-white/10 hover:text-white">
+            <Button href="/contact" variant="secondary-on-dark" size="md">
               Contact Us
             </Button>
           </div>

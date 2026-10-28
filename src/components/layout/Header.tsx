@@ -1,12 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Menu, X, Phone } from "lucide-react";
-import { useState, useEffect } from "react";
+import { MessageCircle } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { mainNav, ctaNav } from "@/data/navigation";
 import { clinic } from "@/data/clinic";
-import { Button } from "../ui/Button";
-import { MobileMenu } from "./MobileMenu";
+import { CurvedMobileMenu } from "./CurvedMobileMenu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,6 +13,9 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  const closeMobileMenu = useCallback(() => setMobileOpen(false), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -21,86 +23,146 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+    const onResize = () => {
+      if (window.innerWidth >= 768 && mobileOpen) {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [mobileOpen]);
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-200",
-          scrolled
-            ? "bg-ivory/95 backdrop-blur-sm shadow-[var(--shadow-nav)]"
-            : "bg-ivory"
-        )}
-      >
-        <div className="mx-auto max-w-6xl flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
-          {/* Wordmark / Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-2 shrink-0"
-            aria-label={`${clinic.fullName} — Home`}
-          >
-            {/* TODO: replace with <Image src={clinic.logoUrl} /> when client supplies logo */}
-            <span className="font-heading text-xl md:text-2xl font-bold text-emerald-brand leading-tight">
-              {clinic.wordmark}
-            </span>
-          </Link>
-
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
-            {mainNav.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200",
-                  pathname === link.href
-                    ? "text-emerald-brand bg-sage"
-                    : "text-charcoal/70 hover:text-emerald-brand hover:bg-sage/50"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Button
+      {/* Utility bar - scrolls away with page */}
+      <div className="hidden bg-olive text-taupe md:block">
+        <div className="site-container flex h-[32px] items-center justify-between">
+          <p className="hidden text-[12px] uppercase tracking-[0.12em] text-taupe/80 md:block">
+            Adyar, Chennai: Dermatology &amp; Aesthetic Medicine
+          </p>
+          <div className="flex w-full items-center justify-between gap-4 text-[12px] uppercase tracking-[0.12em] md:w-auto md:justify-end md:gap-6">
+            <a
               href={clinic.phone.href}
-              variant="secondary"
-              size="sm"
+              className="inline-flex items-center text-taupe transition-colors hover:text-cream"
             >
-              <Phone className="h-4 w-4" />
-              Call
-            </Button>
-            {ctaNav.map((link) => (
-              <Button key={link.href} href={link.href} variant="primary" size="sm">
-                {link.label}
-              </Button>
-            ))}
+              {clinic.phone.display}
+            </a>
+            <a
+              href={clinic.whatsapp.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-taupe transition-colors hover:text-cream"
+            >
+              <MessageCircle className="h-3.5 w-3.5 md:h-3 md:w-3" aria-hidden="true" />
+              <span className="md:hidden">WhatsApp</span>
+              <span className="hidden md:inline">Chat with us</span>
+            </a>
           </div>
+        </div>
+      </div>
 
-          {/* Mobile hamburger */}
-          <button
-            className="lg:hidden flex items-center justify-center h-11 w-11 rounded-xl text-charcoal hover:bg-sage transition-colors duration-200 cursor-pointer"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-          >
-            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+      <header className="sticky top-0 z-50">
+        {/* Main bar */}
+        <div
+          className={cn(
+            "border-b bg-cream transition-colors duration-300",
+            scrolled ? "border-sand/70" : "border-transparent"
+          )}
+        >
+          <div className="site-container flex h-[var(--header-h)] items-center justify-between py-0">
+            {/* Wordmark */}
+            <Link
+              href="/"
+              className="flex min-h-11 shrink-0 flex-col justify-center leading-none"
+              aria-label={`${clinic.fullName}, Home`}
+            >
+              <span className="font-heading text-[11px] uppercase tracking-[0.22em] text-sand-strong">
+                Dr. Jansi&apos;s
+              </span>
+              <span className="mt-1 font-heading text-xl uppercase tracking-[0.12em] text-brown md:text-2xl">
+                Dermverse
+              </span>
+            </Link>
+
+            {/* Desktop nav */}
+            <nav
+              className="hidden items-center gap-7 lg:flex"
+              aria-label="Main navigation"
+            >
+              {mainNav.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "relative font-heading text-base uppercase tracking-[0.01em] transition-colors duration-200",
+                    "after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-sand-strong after:transition-transform after:duration-300 hover:after:scale-x-100",
+                    pathname === link.href
+                      ? "text-sand-strong after:scale-x-100"
+                      : "text-brown hover:text-sand-strong"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Desktop CTA */}
+            <div className="hidden items-center gap-5 lg:flex">
+              {ctaNav.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="inline-flex min-h-11 items-center border-b border-sand pb-0.5 font-heading text-sm uppercase tracking-[0.08em] text-brown transition-colors hover:border-sand-strong hover:text-sand-strong"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Mobile hamburger */}
+            <button
+              ref={menuButtonRef}
+              type="button"
+              id="mobile-menu-button"
+              className="relative flex h-11 w-11 cursor-pointer items-center justify-center text-brown transition-colors duration-200 hover:text-sand-strong md:hidden"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              aria-controls={mobileOpen ? "mobile-menu" : undefined}
+              aria-haspopup="dialog"
+            >
+              <div className="flex flex-col gap-1">
+                <span
+                  className={cn(
+                    "h-px w-5 bg-current transition-all duration-300",
+                    mobileOpen ? "translate-y-[3px] rotate-45" : ""
+                  )}
+                />
+                <span
+                  className={cn(
+                    "h-px w-5 bg-current transition-all duration-300",
+                    mobileOpen ? "opacity-0" : ""
+                  )}
+                />
+                <span
+                  className={cn(
+                    "h-px w-5 bg-current transition-all duration-300",
+                    mobileOpen ? "-translate-y-[3px] -rotate-45" : ""
+                  )}
+                />
+              </div>
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Mobile menu */}
-      <MobileMenu isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
-
-      {/* Spacer for fixed header */}
-      <div className="h-[60px] md:h-[68px]" />
+      <CurvedMobileMenu
+        isOpen={mobileOpen}
+        onClose={closeMobileMenu}
+        triggerRef={menuButtonRef}
+      />
     </>
   );
 }

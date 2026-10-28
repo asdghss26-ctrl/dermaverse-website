@@ -5,17 +5,19 @@ import { Home, CalendarCheck } from "lucide-react";
 export default function NotFound() {
   return (
     <>
-      <Section background="ivory" className="pt-16 pb-16 md:pt-24 md:pb-24">
+      <Section background="cream" className="pt-16 pb-16 md:pt-24 md:pb-24">
         <div className="text-center max-w-md mx-auto">
           {/* Decorative 404 */}
-          <p className="font-heading text-8xl md:text-9xl font-bold text-emerald-brand/10 leading-none mb-4 select-none">
+          <p
+            className="select-none font-heading text-8xl leading-none text-brown/10 md:text-9xl"
+            aria-hidden="true"
+          >
             404
           </p>
 
-          <h1 className="font-heading text-2xl md:text-3xl font-bold text-charcoal mb-3">
-            Page Not Found
-          </h1>
-          <p className="text-charcoal/60 mb-8 leading-relaxed">
+          <p className="eyebrow mb-4 text-sand-strong">404</p>
+          <h1 className="display-md text-brown mb-3">Page not found</h1>
+          <p className="text-brown mb-8 leading-relaxed">
             Sorry, we couldn&apos;t find the page you&apos;re looking for. It may
             have been moved or no longer exists.
           </p>

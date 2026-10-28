@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState, useId } from "react";
 
 export interface FAQItem {
@@ -23,33 +23,33 @@ export function FAQAccordion({ items, className }: FAQAccordionProps) {
   };
 
   return (
-    <div className={cn("divide-y divide-emerald-brand/10", className)}>
+    <div className={cn("border-t border-sand/80", className)}>
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const buttonId = `${id}-button-${index}`;
         const panelId = `${id}-panel-${index}`;
 
         return (
-          <div key={index}>
+          <div key={index} className="border-b border-sand/80">
             <button
               id={buttonId}
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => toggle(index)}
               className={cn(
-                "w-full flex items-center justify-between gap-4 py-5 text-left",
-                "text-charcoal font-medium text-base",
-                "hover:text-emerald-brand transition-colors duration-200",
-                "focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2",
+                "flex min-h-[52px] w-full items-center justify-between gap-2 py-3 text-left md:gap-6 md:py-6",
+                "font-heading text-sm leading-6 text-brown md:text-xl md:leading-7",
+                "transition-colors duration-200 md:hover:text-sand-strong",
                 "cursor-pointer"
               )}
             >
               <span>{item.question}</span>
-              <ChevronDown
+              <Plus
                 className={cn(
-                  "h-5 w-5 shrink-0 text-gold transition-transform duration-200",
-                  isOpen && "rotate-180"
+                  "h-4 w-4 shrink-0 text-sand-strong transition-transform duration-300 md:h-5 md:w-5",
+                  isOpen && "rotate-45"
                 )}
+                strokeWidth={1.5}
                 aria-hidden="true"
               />
             </button>
@@ -57,14 +57,17 @@ export function FAQAccordion({ items, className }: FAQAccordionProps) {
               id={panelId}
               role="region"
               aria-labelledby={buttonId}
+              aria-hidden={!isOpen}
               className={cn(
-                "overflow-hidden transition-[max-height] duration-200 ease-in-out",
+                "overflow-hidden transition-[max-height] duration-300 ease-in-out",
                 isOpen ? "max-h-96" : "max-h-0"
               )}
             >
-              <p className="pb-5 text-sm text-charcoal/70 leading-relaxed">
-                {item.answer}
-              </p>
+              <div hidden={!isOpen}>
+                <p className="max-w-xl pb-6 text-sm leading-relaxed text-brown">
+                  {item.answer}
+                </p>
+              </div>
             </div>
           </div>
         );
