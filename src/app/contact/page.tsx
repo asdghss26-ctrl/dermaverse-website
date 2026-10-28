@@ -97,7 +97,7 @@ export default function ContactPage() {
 
               <div className="mt-6">
                 <Link
-                  href="/book"
+                  href="/appointment"
                   className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brown transition-colors duration-200 hover:text-sand-strong"
                 >
                   Or book a consultation online

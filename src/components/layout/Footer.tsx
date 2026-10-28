@@ -25,7 +25,7 @@ export function Footer() {
               towards healthy, natural-looking skin.
             </p>
             <Link
-              href="/book"
+              href="/appointment"
               className="mt-6 flex min-h-12 w-full items-center justify-center rounded-full bg-brown px-6 text-[11px] font-medium uppercase tracking-[0.14em] text-cream"
             >
               Book Consultation
@@ -123,9 +123,9 @@ export function Footer() {
                 A consultation with {clinic.doctor.shortName} is the first step
                 towards healthy, natural-looking skin.
               </p>
-              <Link
-                href="/book"
-                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-brown px-8 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors duration-300 hover:bg-olive hover:text-cream md:w-auto"
+<Link
+                href="/appointment"
+                className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-brown px-8 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors duration-300 hover:bg-olive hover:text-cream md:w-auto"
               >
                 Book Consultation
               </Link>

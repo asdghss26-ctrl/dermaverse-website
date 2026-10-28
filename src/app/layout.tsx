@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Jost } from "next/font/google";
-import { Header } from "@/components/layout/Header";
-import { MobileBottomBar } from "@/components/layout/MobileBottomBar";
-import { Footer } from "@/components/layout/Footer";
+import { PublicShell } from "@/components/layout/PublicShell";
 import { clinic, SITE_URL } from "@/data/clinic";
 import "./globals.css";
 
@@ -44,20 +42,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bodoni.variable} ${jost.variable}`}>
-      <body className="min-h-screen flex flex-col antialiased">
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-        <Header />
-        <main
-          id="main-content"
-          className="flex-1 overflow-x-clip pb-[calc(48px+env(safe-area-inset-bottom))] md:pb-0"
-        >
-          {children}
-        </main>
-        <Footer />
-        <MobileBottomBar />
+    <html lang="en" suppressHydrationWarning className={`${bodoni.variable} ${jost.variable}`}>
+      <body suppressHydrationWarning className="min-h-screen flex flex-col antialiased">
+        <PublicShell>{children}</PublicShell>
       </body>
     </html>
   );

@@ -18,15 +18,11 @@ interface CurvedMobileMenuProps {
 export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMenuProps) {
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    }
-    return false;
-  });
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setShouldReduceMotion(mediaQuery.matches);
     const handleChange = (e: MediaQueryListEvent) => {
       setShouldReduceMotion(e.matches);
     };

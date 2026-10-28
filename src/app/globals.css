@@ -419,3 +419,21 @@ h4.font-heading {
   pointer-events: none;
   z-index: 0;
 }
+
+/* Admin dashboard: override public-site typography leaks */
+[data-admin-shell] h1,
+[data-admin-shell] h2,
+[data-admin-shell] h3,
+[data-admin-shell] h4,
+[data-admin-shell] h5,
+[data-admin-shell] h6 {
+  font-family: var(--font-jost), "Inter", system-ui, -apple-system, sans-serif;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+[data-admin-shell] {
+  font-size: 14px;
+  line-height: 1.5;
+}

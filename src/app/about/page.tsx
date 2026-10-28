@@ -198,7 +198,7 @@ export default function AboutPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button href="/book" variant="primary-on-dark" size="md">
+            <Button href="/appointment" variant="primary-on-dark" size="md">
               Book Consultation
             </Button>
             <Button href="/contact" variant="secondary-on-dark" size="md">

@@ -15,5 +15,5 @@ export const mainNav: NavLink[] = [
 ];
 
 export const ctaNav: NavLink[] = [
-  { label: "Book Consultation", href: "/book" },
+  { label: "Book Consultation", href: "/appointment" },
 ];
