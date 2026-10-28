@@ -166,7 +166,7 @@ function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-8 space-y-5">
+        <form onSubmit={handleSubmit} className="p-8 space-y-5" autoComplete="off">
           {error && (
             <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-start gap-2">
               <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
@@ -185,6 +185,7 @@ function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="doctor@dermverse.com"
+                autoComplete="off"
                 className="w-full rounded-lg border border-slate-300 py-2.5 px-3.5 text-sm text-slate-900 outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 transition-all"
               />
             </div>
@@ -201,6 +202,7 @@ function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
+                autoComplete="new-password"
                 className="w-full rounded-lg border border-slate-300 py-2.5 px-3.5 text-sm text-slate-900 outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 transition-all"
               />
             </div>
