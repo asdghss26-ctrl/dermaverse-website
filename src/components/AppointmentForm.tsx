@@ -1,11 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createAppointment } from "@/lib/appointments";
 import { Button } from "@/components/ui/Button";
 
 export function AppointmentForm() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [concern, setConcern] = useState("");
@@ -50,8 +51,8 @@ export function AppointmentForm() {
       nextErrors.phone = "Please enter your phone number.";
     } else {
       const phoneDigits = phone.replace(/\D/g, "");
-      if (phoneDigits.length < 7 || phoneDigits.length > 15) {
-        nextErrors.phone = "Enter a valid phone number.";
+      if (phoneDigits.length !== 10) {
+        nextErrors.phone = "Enter a valid 10-digit phone number.";
       }
     }
 
@@ -66,6 +67,7 @@ export function AppointmentForm() {
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
 
@@ -97,7 +99,7 @@ export function AppointmentForm() {
     "block text-[10px] font-medium uppercase tracking-[0.14em] text-sand-strong mb-2";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" noValidate>
       {/* Name */}
       <div>
         <label htmlFor="appointment-name" className={labelClasses}>
@@ -116,12 +118,12 @@ export function AppointmentForm() {
           }}
           aria-invalid={Boolean(errors.name)}
           aria-describedby={errors.name ? "booking-name-error" : undefined}
-          className={cn(inputClasses, errors.name ? "border-brown" : "border-sand")}
+          className={cn(inputClasses, errors.name ? "border-red-500" : "border-sand")}
         />
         {errors.name && (
           <p
             id="booking-name-error"
-            className="mt-2 text-xs font-medium text-brown"
+            className="mt-2 text-xs font-medium text-red-600"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -142,19 +144,21 @@ export function AppointmentForm() {
           required
           autoComplete="tel"
           inputMode="tel"
+          maxLength={10}
           value={phone}
           onChange={(e) => {
-            setPhone(e.target.value);
+            const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+            setPhone(digits);
             if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
           }}
           aria-invalid={Boolean(errors.phone)}
           aria-describedby={errors.phone ? "booking-phone-error" : undefined}
-          className={cn(inputClasses, errors.phone ? "border-brown" : "border-sand")}
+          className={cn(inputClasses, errors.phone ? "border-red-500" : "border-sand")}
         />
         {errors.phone && (
           <p
             id="booking-phone-error"
-            className="mt-2 text-xs font-medium text-brown"
+            className="mt-2 text-xs font-medium text-red-600"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -189,7 +193,7 @@ export function AppointmentForm() {
         </select>
         {errors.concern && (
           <p
-            className="mt-2 text-xs font-medium text-brown"
+            className="mt-2 text-xs font-medium text-red-600"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -224,7 +228,7 @@ export function AppointmentForm() {
         </select>
         {errors.timeSlot && (
           <p
-            className="mt-2 text-xs font-medium text-brown"
+            className="mt-2 text-xs font-medium text-red-600"
             aria-live="polite"
             aria-atomic="true"
           >
