@@ -113,8 +113,8 @@ interface DoctorLoginViewProps {
 }
 
 function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
-  const [email, setEmail] = useState("dermversewebsite1@gmail.com");
-  const [password, setPassword] = useState("dermverse@2026");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
