@@ -262,13 +262,9 @@ export function AppointmentForm() {
 
       {showSuccess && (
         <div className="mt-4 p-4 rounded-md border border-emerald-300 bg-emerald-50 text-emerald-900 text-sm">
-          <p className="font-semibold mb-1">Appointment Request Submitted!</p>
+          <p className="font-semibold mb-1">Appointment Request Sent!</p>
           <p>
-            Your request has been saved and sent to the Doctor Dashboard. You can also visit the{" "}
-            <a href="/admin" className="underline font-semibold text-emerald-950 hover:text-emerald-800">
-              Doctor Dashboard
-            </a>{" "}
-            to manage requests.
+            Your request has been received. You&apos;ll be notified on WhatsApp once your appointment is confirmed or rescheduled.
           </p>
         </div>
       )}
