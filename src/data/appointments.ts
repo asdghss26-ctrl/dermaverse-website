@@ -12,6 +12,7 @@ export interface Appointment {
   concern: string;
   timeSlot: "Morning" | "Evening" | "Night";
   status: AppointmentStatus;
+  message?: string;
 }
 
 /** Sample requests covering every combination we need. */

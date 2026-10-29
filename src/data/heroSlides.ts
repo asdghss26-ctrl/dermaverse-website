@@ -27,7 +27,7 @@ export const heroSlides: HeroSlide[] = [
       objectPosition: "50% 25%",
       layout: "split",
     },
-    ctaHref: clinic.whatsapp.href,
+    ctaHref: "/appointment",
   },
   {
     id: "hair",
@@ -39,7 +39,7 @@ export const heroSlides: HeroSlide[] = [
       alt: "Microneedling treatment for the hairline at Dermverse",
       objectPosition: "55% 50%",
     },
-    ctaHref: clinic.whatsapp.href,
+    ctaHref: "/appointment",
   },
   {
     id: "laser",
@@ -51,7 +51,7 @@ export const heroSlides: HeroSlide[] = [
       alt: "Carbon laser facial treatment at Dermverse",
       objectPosition: "43% 46%",
     },
-    ctaHref: clinic.whatsapp.href,
+    ctaHref: "/appointment",
   },
   {
     id: "confidence",
@@ -63,6 +63,6 @@ export const heroSlides: HeroSlide[] = [
       alt: "Clinical jawline treatment at Dermverse",
       objectPosition: "47% 50%",
     },
-    ctaHref: clinic.whatsapp.href,
+    ctaHref: "/appointment",
   },
 ];

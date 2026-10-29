@@ -27,6 +27,7 @@ export async function createAppointment(
     phone: data.phone.trim(),
     concern: data.concern,
     timeSlot: data.timeSlot,
+    ...(data.message ? { message: data.message.trim() } : {}),
     status: data.status || "Pending",
     createdAt: serverTimestamp(),
   };

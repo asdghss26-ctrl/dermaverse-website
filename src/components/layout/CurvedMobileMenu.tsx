@@ -263,7 +263,7 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
                   className="mt-8"
                 >
                   <Link
-                    href="/book"
+                    href="/appointment"
                     onClick={onClose}
                     className="flex min-h-[52px] w-full items-center justify-center rounded-full bg-brown text-[11px] font-medium uppercase tracking-[0.14em] text-cream"
                   >

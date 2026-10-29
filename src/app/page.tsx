@@ -274,7 +274,7 @@ export default function HomePage() {
               Book a personalised consultation with Dr. Jansi to discuss your skin and hair concerns.
             </p>
             <Link
-              href="/book"
+              href="/appointment"
               className="mt-6 inline-flex min-h-[52px] items-center justify-center gap-2 bg-brown px-8 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors hover:bg-olive"
             >
               <CalendarDays className="h-4 w-4" aria-hidden="true" />

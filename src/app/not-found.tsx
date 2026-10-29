@@ -27,7 +27,7 @@ export default function NotFound() {
               <Home className="h-5 w-5" />
               Back to Home
             </Button>
-            <Button href="/book" variant="secondary" size="md">
+            <Button href="/appointment" variant="secondary" size="md">
               <CalendarCheck className="h-5 w-5" />
               Book Consultation
             </Button>

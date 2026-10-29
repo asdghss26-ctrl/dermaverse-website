@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/gallery`, lastModified: new Date(), priority: 0.6 },
     { url: `${SITE_URL}/faq`, lastModified: new Date(), priority: 0.6 },
     { url: `${SITE_URL}/contact`, lastModified: new Date(), priority: 0.8 },
-    { url: `${SITE_URL}/book`, lastModified: new Date(), priority: 0.9 },
+    { url: `${SITE_URL}/appointment`, lastModified: new Date(), priority: 0.9 },
   ];
 
   const servicePages = services.map((s) => ({

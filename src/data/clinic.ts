@@ -49,7 +49,7 @@ export const clinic = {
     href: "https://wa.me/917358072111", // TODO: confirm WhatsApp number with client
   },
 
-  hours: "Mon to Sat, 10 AM to 7 PM",
+  hours: "Mon to Sat, 10 AM to 8 PM",
 
   google: {
     rating: 5.0,

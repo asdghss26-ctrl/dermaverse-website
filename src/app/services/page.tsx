@@ -104,8 +104,7 @@ export default function ServicesPage() {
             Schedule a consultation with {clinic.doctor.shortName} to discuss your concerns and explore a personalised treatment plan.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button href={clinic.whatsapp.href} variant="primary-on-dark" size="lg" external>
-              <MessageCircle className="h-5 w-5" />
+            <Button href="/appointment" variant="primary-on-dark" size="lg">
               Book Consultation
             </Button>
             <Button href={clinic.phone.href} variant="secondary-on-dark" size="lg">

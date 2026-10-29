@@ -58,7 +58,7 @@ export function MobileBottomBar() {
 
   const isHome = pathname === "/";
   const isServices = pathname.startsWith("/services");
-  const isBook = pathname === "/book";
+  const isBook = pathname === "/appointment" || pathname === "/book";
   const isContact = pathname === "/contact";
 
   if (isKeyboardOpen) return null;
@@ -134,9 +134,9 @@ export function MobileBottomBar() {
           </li>
           <li className="relative">
             <Link
-              href="/book"
+              href="/appointment"
               aria-current={isBook ? "page" : undefined}
-              aria-label="Book Consultation"
+              aria-label="Book Appointment"
               className="flex h-[68px] flex-col items-center justify-center"
             >
               <span

@@ -544,7 +544,6 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                       href={slide.ctaHref}
                       variant="primary-on-dark"
                       size="lg"
-                      external
                       className="w-full md:w-auto"
                     >
                       Book Consultation

@@ -4,13 +4,47 @@ import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { createAppointment } from "@/lib/appointments";
 import { Button } from "@/components/ui/Button";
+import { Send, CheckCircle2 } from "lucide-react";
+import { services } from "@/data/services";
 
-export function AppointmentForm() {
+interface AppointmentFormProps {
+  className?: string;
+}
+
+const TIME_SLOTS = [
+  {
+    id: "Morning" as const,
+    slotNumber: "Slot 1",
+    time: "10:00 AM – 1:00 PM",
+    label: "Slot 1: 10:00 AM – 1:00 PM",
+  },
+  {
+    id: "Evening" as const,
+    slotNumber: "Slot 2",
+    time: "2:00 PM – 5:00 PM",
+    label: "Slot 2: 2:00 PM – 5:00 PM",
+  },
+  {
+    id: "Night" as const,
+    slotNumber: "Slot 3",
+    time: "5:00 PM – 8:00 PM",
+    label: "Slot 3: 5:00 PM – 8:00 PM",
+  },
+];
+
+export function AppointmentForm({ className }: AppointmentFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [concern, setConcern] = useState("");
-  const [timeSlot, setTimeSlot] = useState("");
+  const nameRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    concern: "",
+    timeSlot: "" as "Morning" | "Evening" | "Night" | "",
+    message: "",
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{
     name?: string;
@@ -20,18 +54,28 @@ export function AppointmentForm() {
   }>({});
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const allServiceTitles = [
-    "Acne Treatment",
-    "Pigmentation & Chemical Peels",
-    "Cosmetic & Aesthetic Dermatology",
-    "Paediatric Skin Care",
-    "Dermatosurgery",
-    "Anti-Ageing",
-    "Hair Fall & Scalp Care",
-    "Non-Surgical Hair Loss Care",
-    "Laser Treatments",
+  const concernOptions = [
+    ...services.map((s) => s.title),
     "General Consultation",
   ];
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const handleSlotSelect = (slotId: "Morning" | "Evening" | "Night") => {
+    setFormData((prev) => ({ ...prev, timeSlot: slotId }));
+    if (errors.timeSlot) {
+      setErrors((prev) => ({ ...prev, timeSlot: undefined }));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,53 +87,66 @@ export function AppointmentForm() {
       timeSlot?: string;
     } = {};
 
-    if (!name.trim()) {
+    if (!formData.name.trim()) {
       nextErrors.name = "Please enter your name.";
     }
 
-    if (!phone.trim()) {
+    const phoneDigits = formData.phone.replace(/\D/g, "");
+    if (!formData.phone.trim()) {
       nextErrors.phone = "Please enter your phone number.";
-    } else {
-      const phoneDigits = phone.replace(/\D/g, "");
-      if (phoneDigits.length !== 10) {
-        nextErrors.phone = "Enter a valid 10-digit phone number.";
-      }
+    } else if (phoneDigits.length !== 10) {
+      nextErrors.phone = "Enter a valid 10-digit phone number.";
     }
 
-    if (!concern) {
-      nextErrors.concern = "Please select a concern type.";
+    if (!formData.concern) {
+      nextErrors.concern = "Please select a concern or service.";
     }
 
-    if (!timeSlot) {
+    if (!formData.timeSlot) {
       nextErrors.timeSlot = "Please select a preferred time slot.";
     }
 
-    setErrors(nextErrors);
-
     if (Object.keys(nextErrors).length > 0) {
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setErrors(nextErrors);
+      requestAnimationFrame(() => {
+        if (nextErrors.name) {
+          nameRef.current?.focus();
+        } else if (nextErrors.phone) {
+          phoneRef.current?.focus();
+        } else {
+          formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
       return;
     }
 
+    setErrors({});
     setIsSubmitting(true);
+
     try {
       await createAppointment({
-        patientName: name.trim(),
-        phone: phone.trim(),
-        concern: concern,
-        timeSlot: timeSlot as "Morning" | "Evening" | "Night",
+        patientName: formData.name.trim(),
+        phone: formData.phone.trim(),
+        concern: formData.concern,
+        timeSlot: formData.timeSlot as "Morning" | "Evening" | "Night",
+        message: formData.message.trim() || undefined,
         status: "Pending",
       });
 
       setShowSuccess(true);
-      setName("");
-      setPhone("");
-      setConcern("");
-      setTimeSlot("");
+      setFormData({
+        name: "",
+        phone: "",
+        concern: "",
+        timeSlot: "",
+        message: "",
+      });
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {
       console.error("Could not save appointment:", err);
       setErrors({
-        phone: "Could not submit appointment. Please check your connection or contact the clinic directly.",
+        phone:
+          "Could not submit appointment. Please check your connection or contact the clinic directly.",
       });
       formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     } finally {
@@ -97,37 +154,49 @@ export function AppointmentForm() {
     }
   };
 
-  const inputClasses =
-    "w-full rounded-none border-0 border-b bg-transparent px-0 py-3 text-brown text-base placeholder:text-sand-strong focus:border-sand-strong focus:ring-0 transition-colors duration-200 min-h-[48px]";
+  const inputClasses = cn(
+    "w-full rounded-none border-0 border-b bg-transparent px-0 py-3",
+    "text-brown text-base placeholder:text-sand-strong",
+    "focus:border-sand-strong focus:ring-0",
+    "transition-colors duration-200 min-h-[48px]"
+  );
+
   const labelClasses =
     "block text-[10px] font-medium uppercase tracking-[0.14em] text-sand-strong mb-2";
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" noValidate>
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      className={cn("space-y-6", className)}
+      noValidate
+    >
       {/* Name */}
       <div>
         <label htmlFor="appointment-name" className={labelClasses}>
           Your name <span className="text-sand-strong">*</span>
         </label>
         <input
+          ref={nameRef}
           id="appointment-name"
           name="name"
           type="text"
           required
           autoComplete="name"
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-            if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
-          }}
+          placeholder="Enter your full name"
+          value={formData.name}
+          onChange={handleChange}
           aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? "booking-name-error" : undefined}
-          className={cn(inputClasses, errors.name ? "border-red-500" : "border-sand")}
+          aria-describedby={errors.name ? "appointment-name-error" : undefined}
+          className={cn(
+            inputClasses,
+            errors.name ? "border-brown" : "border-sand"
+          )}
         />
         {errors.name && (
           <p
-            id="booking-name-error"
-            className="mt-2 text-xs font-medium text-red-600"
+            id="appointment-name-error"
+            className="mt-2 text-xs font-medium text-brown"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -142,6 +211,7 @@ export function AppointmentForm() {
           Phone number <span className="text-sand-strong">*</span>
         </label>
         <input
+          ref={phoneRef}
           id="appointment-phone"
           name="phone"
           type="tel"
@@ -149,20 +219,26 @@ export function AppointmentForm() {
           autoComplete="tel"
           inputMode="tel"
           maxLength={10}
-          value={phone}
+          placeholder="10-digit mobile number"
+          value={formData.phone}
           onChange={(e) => {
             const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
-            setPhone(digits);
-            if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
+            setFormData((prev) => ({ ...prev, phone: digits }));
+            if (errors.phone) {
+              setErrors((prev) => ({ ...prev, phone: undefined }));
+            }
           }}
           aria-invalid={Boolean(errors.phone)}
-          aria-describedby={errors.phone ? "booking-phone-error" : undefined}
-          className={cn(inputClasses, errors.phone ? "border-red-500" : "border-sand")}
+          aria-describedby={errors.phone ? "appointment-phone-error" : undefined}
+          className={cn(
+            inputClasses,
+            errors.phone ? "border-brown" : "border-sand"
+          )}
         />
         {errors.phone && (
           <p
-            id="booking-phone-error"
-            className="mt-2 text-xs font-medium text-red-600"
+            id="appointment-phone-error"
+            className="mt-2 text-xs font-medium text-brown"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -171,25 +247,27 @@ export function AppointmentForm() {
         )}
       </div>
 
-      {/* Concern type */}
+      {/* Concern / Service */}
       <div>
         <label htmlFor="appointment-concern" className={labelClasses}>
-          Concern type <span className="text-sand-strong">*</span>
+          Service / Concern <span className="text-sand-strong">*</span>
         </label>
         <select
           id="appointment-concern"
           name="concern"
           required
-          value={concern}
-          onChange={(e) => {
-            setConcern(e.target.value);
-            if (errors.concern) setErrors((prev) => ({ ...prev, concern: undefined }));
-          }}
-          className="w-full rounded-none border-0 border-b bg-transparent px-0 py-3 text-brown text-base placeholder:text-sand-strong focus:border-sand-strong focus:ring-0 transition-colors duration-200 min-h-[48px]"
+          value={formData.concern}
+          onChange={handleChange}
           aria-invalid={Boolean(errors.concern)}
+          aria-describedby={errors.concern ? "appointment-concern-error" : undefined}
+          className={cn(
+            inputClasses,
+            "border-sand appearance-none cursor-pointer",
+            errors.concern && "border-brown"
+          )}
         >
-          <option value="">Select a concern</option>
-          {allServiceTitles.map((title) => (
+          <option value="">Select a service or concern</option>
+          {concernOptions.map((title) => (
             <option key={title} value={title}>
               {title}
             </option>
@@ -197,7 +275,8 @@ export function AppointmentForm() {
         </select>
         {errors.concern && (
           <p
-            className="mt-2 text-xs font-medium text-red-600"
+            id="appointment-concern-error"
+            className="mt-2 text-xs font-medium text-brown"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -206,33 +285,57 @@ export function AppointmentForm() {
         )}
       </div>
 
-      {/* Preferred time slot */}
+      {/* Preferred Time Slot */}
       <div>
-        <label htmlFor="appointment-time" className={labelClasses}>
+        <label className={labelClasses}>
           Preferred time slot <span className="text-sand-strong">*</span>
         </label>
-        <select
-          id="appointment-time"
-          name="timeSlot"
-          required
-          value={timeSlot}
-          onChange={(e) => {
-            setTimeSlot(e.target.value);
-            if (errors.timeSlot) setErrors((prev) => ({ ...prev, timeSlot: undefined }));
-          }}
-          className="w-full rounded-none border-0 border-b bg-transparent px-0 py-3 text-brown text-base placeholder:text-sand-strong focus:border-sand-strong focus:ring-0 transition-colors duration-200 min-h-[48px]"
-          aria-invalid={Boolean(errors.timeSlot)}
+
+        <div
+          role="radiogroup"
+          aria-label="Preferred time slot"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3"
         >
-          <option value="">Select a time slot</option>
-          {"Morning Evening Night".split(" ").map((slot) => (
-            <option key={slot} value={slot}>
-              {slot}
-            </option>
-          ))}
-        </select>
+          {TIME_SLOTS.map((slot) => {
+            const isSelected = formData.timeSlot === slot.id;
+            return (
+              <button
+                key={slot.id}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                onClick={() => handleSlotSelect(slot.id)}
+                className={cn(
+                  "flex flex-col items-center justify-center p-3.5 border transition-all duration-200 text-center cursor-pointer",
+                  isSelected
+                    ? "border-brown bg-brown text-cream shadow-sm"
+                    : "border-sand bg-cream hover:border-sand-strong text-brown"
+                )}
+              >
+                <span
+                  className={cn(
+                    "text-xs font-semibold uppercase tracking-wider",
+                    isSelected ? "text-cream" : "text-brown"
+                  )}
+                >
+                  {slot.slotNumber}
+                </span>
+                <span
+                  className={cn(
+                    "text-xs mt-1",
+                    isSelected ? "text-cream/90" : "text-sand-strong"
+                  )}
+                >
+                  {slot.time}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         {errors.timeSlot && (
           <p
-            className="mt-2 text-xs font-medium text-red-600"
+            className="mt-2 text-xs font-medium text-brown"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -241,16 +344,35 @@ export function AppointmentForm() {
         )}
       </div>
 
-      {/* Submit */}
+      {/* Message (Optional) */}
+      <div>
+        <label htmlFor="appointment-message" className={labelClasses}>
+          Message (optional)
+        </label>
+        <textarea
+          id="appointment-message"
+          name="message"
+          rows={3}
+          placeholder="Tell us about your concern or preferred appointment date (optional)"
+          value={formData.message}
+          onChange={handleChange}
+          className={cn(inputClasses, "border-sand min-h-[80px] resize-y")}
+        />
+      </div>
+
+      {/* Submit Button */}
       <Button
         type="submit"
         variant="primary"
         size="lg"
         disabled={isSubmitting}
-        className={cn("w-full mt-2", isSubmitting && "opacity-70 cursor-not-allowed")}
+        className={cn(
+          "w-full min-h-[52px]",
+          isSubmitting && "opacity-70 cursor-not-allowed"
+        )}
       >
         {isSubmitting ? (
-          <>
+          <span className="inline-flex items-center gap-2">
             <svg
               className="h-4 w-4 animate-spin"
               xmlns="http://www.w3.org/2000/svg"
@@ -258,22 +380,44 @@ export function AppointmentForm() {
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
             </svg>
             Submitting Request…
-          </>
+          </span>
         ) : (
-          "Submit Appointment Request"
+          <span className="inline-flex items-center gap-2">
+            <Send className="h-4 w-4" />
+            Book Consultation
+          </span>
         )}
       </Button>
 
+      {/* Success Notification */}
       {showSuccess && (
-        <div className="mt-4 p-4 rounded-md border border-emerald-300 bg-emerald-50 text-emerald-900 text-sm">
-          <p className="font-semibold mb-1">Appointment Request Sent!</p>
-          <p>
-            Your request has been received. You&apos;ll be notified on WhatsApp once your appointment is confirmed or rescheduled.
-          </p>
+        <div className="border border-sand bg-taupe-soft p-5 text-brown">
+          <div className="flex items-start gap-3">
+            <CheckCircle2 className="h-5 w-5 text-sand-strong mt-0.5 shrink-0" />
+            <div>
+              <p className="font-heading text-lg font-semibold text-brown">
+                Appointment Request Sent!
+              </p>
+              <p className="mt-1 text-sm text-sand-strong leading-relaxed">
+                Your request has been received by Dr. Jansi&apos;s Dermverse team. We will contact you via WhatsApp or phone call to confirm your appointment time.
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </form>

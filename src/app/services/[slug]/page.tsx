@@ -150,12 +150,10 @@ export default async function ServiceDetailPage({
             whether this treatment may be right for you.
           </p>
           <Button
-            href={clinic.whatsapp.href}
+            href="/appointment"
             variant="primary-on-dark"
             size="lg"
-            external
           >
-            <MessageCircle className="h-5 w-5" />
             Book Consultation
           </Button>
         </div>

@@ -735,9 +735,9 @@ function AppointmentCard({
 /* ------------------------------------------------------------------ */
 
 const SLOT_META: Record<TimeSlot, { icon: React.ElementType; label: string }> = {
-  Morning: { icon: Sun, label: "Morning" },
-  Evening: { icon: Sunset, label: "Evening" },
-  Night: { icon: Moon, label: "Night" },
+  Morning: { icon: Sun, label: "Slot 1 (10 AM - 1 PM)" },
+  Evening: { icon: Sunset, label: "Slot 2 (2 PM - 5 PM)" },
+  Night: { icon: Moon, label: "Slot 3 (5 PM - 8 PM)" },
 };
 
 interface SlotColumnProps {
@@ -938,9 +938,9 @@ function AddAppointmentModal({ open, onClose, onAdd }: AddAppointmentModalProps)
                 onChange={(e) => setTimeSlot(e.target.value as TimeSlot)}
                 className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 bg-white"
               >
-                <option value="Morning">Morning</option>
-                <option value="Evening">Evening</option>
-                <option value="Night">Night</option>
+                <option value="Morning">Slot 1 (10:00 AM – 1:00 PM)</option>
+                <option value="Evening">Slot 2 (2:00 PM – 5:00 PM)</option>
+                <option value="Night">Slot 3 (5:00 PM – 8:00 PM)</option>
               </select>
             </div>
 
@@ -1466,7 +1466,10 @@ export default function AdminDashboard() {
                                 {appt.timeSlot === "Morning" && <Sun className="h-3.5 w-3.5 text-amber-500" />}
                                 {appt.timeSlot === "Evening" && <Sunset className="h-3.5 w-3.5 text-orange-500" />}
                                 {appt.timeSlot === "Night" && <Moon className="h-3.5 w-3.5 text-indigo-500" />}
-                                {appt.timeSlot}
+                                {appt.timeSlot === "Morning" && "Slot 1 (10 AM - 1 PM)"}
+                                {appt.timeSlot === "Evening" && "Slot 2 (2 PM - 5 PM)"}
+                                {appt.timeSlot === "Night" && "Slot 3 (5 PM - 8 PM)"}
+                                {!["Morning", "Evening", "Night"].includes(appt.timeSlot) && appt.timeSlot}
                               </span>
                             </td>
                             <td className="py-3 px-4">

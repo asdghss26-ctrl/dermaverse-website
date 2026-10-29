@@ -87,13 +87,11 @@ export default function GalleryPage() {
             Consult Dr. Jansi Priyadharshini A for comprehensive skin, hair, and aesthetic dermatology care.
           </p>
           <Button
-            href={clinic.whatsapp.href}
+            href="/appointment"
             variant="primary"
             size="md"
-            external
           >
             Book Consultation
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </Section>
