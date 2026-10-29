@@ -285,7 +285,7 @@ function Sidebar({
         )}
       >
         {/* Branding */}
-        <div className="flex h-[56px] items-center gap-2.5 px-5 shrink-0 border-b border-[#1E3A5A]">
+        <div className="flex h-14 items-center gap-2.5 px-5 shrink-0 border-b border-[#1E3A5A]">
           <div
             className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold"
             style={{ backgroundColor: T.accent, color: T.white }}
@@ -480,7 +480,7 @@ function TopBar({
 }: TopBarProps) {
   return (
     <header
-      className="flex h-[56px] items-center justify-between shrink-0 px-4 lg:px-6 border-b"
+      className="flex h-14 items-center justify-between shrink-0 px-4 lg:px-6 border-b"
       style={{
         backgroundColor: T.surface,
         borderColor: T.border,
@@ -518,7 +518,7 @@ function TopBar({
           title={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
           aria-label={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
           className={cn(
-            "flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[12px] font-medium transition-colors cursor-pointer",
+            "flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer",
             soundEnabled
               ? "border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100"
               : "border-slate-200 bg-slate-50 text-slate-400 hover:bg-slate-100"
@@ -538,7 +538,7 @@ function TopBar({
           onClick={onRefresh}
           disabled={refreshing}
           title="Refresh appointments from database"
-          className="flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[12px] font-medium transition-colors hover:bg-slate-50 cursor-pointer disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors hover:bg-slate-50 cursor-pointer disabled:opacity-50"
           style={{ borderColor: T.border, color: T.secondary }}
         >
           <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin")} />
@@ -547,7 +547,7 @@ function TopBar({
 
         <button
           onClick={onOpenAddModal}
-          className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] font-semibold text-white cursor-pointer shadow-sm hover:opacity-95 transition-opacity"
+          className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold text-white cursor-pointer shadow-sm hover:opacity-95 transition-opacity"
           style={{ backgroundColor: T.accent }}
         >
           <Plus className="h-4 w-4" />
@@ -570,7 +570,7 @@ function TopBar({
         <button
           onClick={onLogout}
           title="Sign Out of Doctor Dashboard"
-          className="flex items-center gap-1.5 rounded-md border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 px-2.5 py-1.5 text-[12px] font-medium transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 rounded-md border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer"
         >
           <LogOut className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">Sign Out</span>
@@ -692,7 +692,7 @@ function AppointmentCard({
         {/* Row 1: Name + Status */}
         <div className="flex items-start justify-between gap-2 mb-1.5">
           <p
-            className="text-[14px] font-semibold leading-snug break-words min-w-0"
+            className="text-sm font-semibold leading-snug break-words min-w-0"
             style={{ color: T.heading }}
           >
             {appointment.patientName}
@@ -709,7 +709,7 @@ function AppointmentCard({
         </p>
 
         {/* Row 3: Phone */}
-        <div className="flex items-center justify-between text-[12px] mb-3">
+        <div className="flex items-center justify-between text-xs mb-3">
           <div className="flex items-center gap-1.5" style={{ color: T.secondary }}>
             <Phone className="h-3 w-3 shrink-0" />
             <a
@@ -737,7 +737,7 @@ function AppointmentCard({
           <div className="flex gap-2">
             <button
               onClick={() => onAccept(appointment.id)}
-              className="flex-1 rounded-md py-1.5 text-[12px] font-semibold cursor-pointer transition-opacity hover:opacity-90 flex items-center justify-center gap-1 text-white shadow-xs"
+              className="flex-1 rounded-md py-1.5 text-xs font-semibold cursor-pointer transition-opacity hover:opacity-90 flex items-center justify-center gap-1 text-white shadow-xs"
               style={{ backgroundColor: "#059669" }}
             >
               <CheckCircle2 className="h-3.5 w-3.5" />
@@ -745,7 +745,7 @@ function AppointmentCard({
             </button>
             <button
               onClick={() => onReject(appointment.id)}
-              className="flex-1 rounded-md py-1.5 text-[12px] font-semibold cursor-pointer transition-opacity hover:opacity-90 flex items-center justify-center gap-1 text-white shadow-xs"
+              className="flex-1 rounded-md py-1.5 text-xs font-semibold cursor-pointer transition-opacity hover:opacity-90 flex items-center justify-center gap-1 text-white shadow-xs"
               style={{ backgroundColor: "#DC2626" }}
             >
               <XCircle className="h-3.5 w-3.5" />
@@ -1511,7 +1511,7 @@ export default function AdminDashboard() {
                           key={s}
                           onClick={() => setStatusFilter(s)}
                           className={cn(
-                            "rounded-md px-3 py-1.5 text-[12px] font-semibold transition-colors cursor-pointer",
+                            "rounded-md px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
                             "border"
                           )}
                           style={{
