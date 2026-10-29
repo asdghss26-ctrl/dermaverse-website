@@ -16,6 +16,17 @@ import { Appointment } from "@/data/appointments";
 
 const APPOINTMENTS_COLLECTION = "appointments";
 
+export function normalizeTimeSlot(raw: unknown): "Morning" | "Evening" | "Night" {
+  if (typeof raw !== "string") return "Morning";
+  const s = raw.toLowerCase();
+  if (s.includes("slot 1") || s.includes("morning") || s.includes("10")) return "Morning";
+  if (s.includes("slot 2") || s.includes("afternoon") || s.includes("2pm") || (s.includes("evening") && !s.includes("8") && !s.includes("5pm"))) return "Evening";
+  if (s.includes("slot 3") || s.includes("night") || s.includes("8pm") || s.includes("5pm")) return "Night";
+  if (s === "evening") return "Evening";
+  if (s === "night") return "Night";
+  return "Morning";
+}
+
 /**
  * Creates a new appointment request in Cloud Firestore.
  */
@@ -32,47 +43,45 @@ export async function createAppointment(
     createdAt: serverTimestamp(),
   };
 
-  if (isFirebaseConfigured()) {
-    try {
-      const docRef = await addDoc(
-        collection(db, APPOINTMENTS_COLLECTION),
-        newAppointmentData
-      );
-      return docRef.id;
-    } catch (err) {
-      console.error("Firestore write failed:", err);
-      throw err;
-    }
+  try {
+    const docRef = await addDoc(
+      collection(db, APPOINTMENTS_COLLECTION),
+      newAppointmentData
+    );
+    return docRef.id;
+  } catch (err) {
+    console.error("Firestore write failed:", err);
+    throw err;
   }
-
-  // Fallback ID for offline scenarios
-  const fallbackId = `appt-${Date.now()}`;
-  return fallbackId;
 }
 
 /**
  * Fetches all appointments once from Cloud Firestore.
  */
 export async function getAppointments(): Promise<Appointment[]> {
-  if (!isFirebaseConfigured()) return [];
-
   try {
-    const q = query(
-      collection(db, APPOINTMENTS_COLLECTION),
-      orderBy("createdAt", "desc")
-    );
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((docSnap) => {
+    const snapshot = await getDocs(collection(db, APPOINTMENTS_COLLECTION));
+    const items: Appointment[] = snapshot.docs.map((docSnap) => {
       const d = docSnap.data();
       return {
         id: docSnap.id,
         patientName: d.patientName || "Anonymous",
         phone: d.phone || "",
         concern: d.concern || "General Consultation",
-        timeSlot: d.timeSlot || "Morning",
+        timeSlot: normalizeTimeSlot(d.timeSlot),
         status: d.status || "Pending",
+        message: d.message || "",
+        createdAt: d.createdAt,
       };
     });
+
+    items.sort((a: any, b: any) => {
+      const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+      const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+      return tB - tA;
+    });
+
+    return items;
   } catch (err) {
     console.warn("Failed to fetch appointments:", err);
     return [];
@@ -87,19 +96,9 @@ export function subscribeAppointments(
   onUpdate: (appointments: Appointment[]) => void,
   onError?: (err: Error) => void
 ): Unsubscribe {
-  if (!isFirebaseConfigured()) {
-    onUpdate([]);
-    return () => {};
-  }
-
   try {
-    const q = query(
-      collection(db, APPOINTMENTS_COLLECTION),
-      orderBy("createdAt", "desc")
-    );
-
     const unsubscribe = onSnapshot(
-      q,
+      collection(db, APPOINTMENTS_COLLECTION),
       (snapshot) => {
         if (snapshot.empty) {
           onUpdate([]);
@@ -113,9 +112,17 @@ export function subscribeAppointments(
             patientName: d.patientName || "Anonymous",
             phone: d.phone || "",
             concern: d.concern || "General Consultation",
-            timeSlot: d.timeSlot || "Morning",
+            timeSlot: normalizeTimeSlot(d.timeSlot),
             status: d.status || "Pending",
+            message: d.message || "",
+            createdAt: d.createdAt,
           };
+        });
+
+        items.sort((a: any, b: any) => {
+          const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+          const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+          return tB - tA;
         });
 
         onUpdate(items);
@@ -123,7 +130,6 @@ export function subscribeAppointments(
       (err) => {
         console.warn("Firestore subscription error:", err);
         if (onError) onError(err);
-        onUpdate([]);
       }
     );
 

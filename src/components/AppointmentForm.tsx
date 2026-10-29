@@ -164,6 +164,32 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
   const labelClasses =
     "block text-[10px] font-medium uppercase tracking-[0.14em] text-sand-strong mb-2";
 
+  if (showSuccess) {
+    return (
+      <div className="border border-sand bg-cream p-8 md:p-10 text-center animate-in fade-in duration-300">
+        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-olive/10 text-olive">
+          <CheckCircle2 className="h-9 w-9 text-olive" />
+        </div>
+        <p className="eyebrow mb-2 text-sand-strong">Confirmation</p>
+        <h3 className="font-heading text-2xl md:text-3xl font-semibold tracking-tight text-brown">
+          Appointment Request Sent!
+        </h3>
+        <p className="mt-4 text-base text-brown/90 leading-relaxed max-w-md mx-auto">
+          Thank you. Your consultation request has been received by Dr. Jansi&apos;s Dermverse team. We will reach out to you via WhatsApp or phone call to confirm your appointment time.
+        </p>
+        <div className="mt-8 pt-6 border-t border-sand/40 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowSuccess(false)}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-none bg-brown px-8 text-xs font-semibold uppercase tracking-[0.14em] text-cream transition-colors hover:bg-olive cursor-pointer"
+          >
+            Book Another Consultation
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form
       ref={formRef}
@@ -403,23 +429,6 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           </span>
         )}
       </Button>
-
-      {/* Success Notification */}
-      {showSuccess && (
-        <div className="border border-sand bg-taupe-soft p-5 text-brown">
-          <div className="flex items-start gap-3">
-            <CheckCircle2 className="h-5 w-5 text-sand-strong mt-0.5 shrink-0" />
-            <div>
-              <p className="font-heading text-lg font-semibold text-brown">
-                Appointment Request Sent!
-              </p>
-              <p className="mt-1 text-sm text-sand-strong leading-relaxed">
-                Your request has been received by Dr. Jansi&apos;s Dermverse team. We will contact you via WhatsApp or phone call to confirm your appointment time.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </form>
   );
 }

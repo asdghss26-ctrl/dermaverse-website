@@ -114,7 +114,7 @@ interface DoctorLoginViewProps {
 }
 
 function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("dermversewebsite1@gmail.com");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -185,7 +185,7 @@ function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="doctor@dermverse.com"
+                placeholder="dermversewebsite1@gmail.com"
                 autoComplete="off"
                 className="w-full rounded-lg border border-slate-300 py-2.5 px-3.5 text-sm text-slate-900 outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 transition-all"
               />
@@ -1022,6 +1022,17 @@ export default function AdminDashboard() {
   // Real-time Firestore subscription when logged in
   useEffect(() => {
     if (!currentUser) return;
+
+    // Immediately fetch once to ensure immediate data population
+    getAppointments()
+      .then((items) => {
+        if (items.length > 0) {
+          setAppointments(items);
+        }
+      })
+      .catch((err) => {
+        console.warn("Initial getAppointments error:", err);
+      });
 
     const unsubscribe = subscribeAppointments(
       (items) => {
