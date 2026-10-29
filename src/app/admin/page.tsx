@@ -407,11 +407,27 @@ function Sidebar({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Notification Sound (Web Audio API)                                 */
+/*  Notification Sound (HTML5 Audio + Web Audio Fallback)              */
 /* ------------------------------------------------------------------ */
 
 function playNotificationChime() {
   if (typeof window === "undefined") return;
+
+  try {
+    const audio = new Audio("/sounds/notification.wav");
+    audio.volume = 0.9;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        playWebAudioFallback();
+      });
+    }
+  } catch {
+    playWebAudioFallback();
+  }
+}
+
+async function playWebAudioFallback() {
   try {
     const AudioContextClass =
       window.AudioContext ||
@@ -420,17 +436,17 @@ function playNotificationChime() {
 
     const ctx = new AudioContextClass();
     if (ctx.state === "suspended") {
-      ctx.resume().catch(() => {});
+      await ctx.resume();
     }
 
     const now = ctx.currentTime;
 
-    // Elegant medical chime: Note 1 (E5: 659.25Hz)
+    // Note 1 (E5: 659.25Hz)
     const osc1 = ctx.createOscillator();
     const gain1 = ctx.createGain();
     osc1.type = "sine";
     osc1.frequency.setValueAtTime(659.25, now);
-    gain1.gain.setValueAtTime(0.18, now);
+    gain1.gain.setValueAtTime(0.2, now);
     gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
     osc1.connect(gain1);
     gain1.connect(ctx.destination);
@@ -441,13 +457,13 @@ function playNotificationChime() {
     const osc2 = ctx.createOscillator();
     const gain2 = ctx.createGain();
     osc2.type = "sine";
-    osc2.frequency.setValueAtTime(880, now + 0.12);
-    gain2.gain.setValueAtTime(0.22, now + 0.12);
-    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+    osc2.frequency.setValueAtTime(880, now + 0.14);
+    gain2.gain.setValueAtTime(0.25, now + 0.14);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
     osc2.connect(gain2);
     gain2.connect(ctx.destination);
-    osc2.start(now + 0.12);
-    osc2.stop(now + 0.75);
+    osc2.start(now + 0.14);
+    osc2.stop(now + 0.8);
   } catch (err) {
     console.warn("Could not play notification sound:", err);
   }
@@ -513,26 +529,40 @@ function TopBar({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        <button
-          onClick={onToggleSound}
-          title={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
-          aria-label={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
-          className={cn(
-            "flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer",
-            soundEnabled
-              ? "border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100"
-              : "border-slate-200 bg-slate-50 text-slate-400 hover:bg-slate-100"
+        <div className="flex items-center gap-1">
+          <button
+            onClick={onToggleSound}
+            title={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
+            aria-label={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
+            className={cn(
+              "flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer",
+              soundEnabled
+                ? "border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100"
+                : "border-slate-200 bg-slate-50 text-slate-400 hover:bg-slate-100"
+            )}
+          >
+            {soundEnabled ? (
+              <Volume2 className="h-3.5 w-3.5 text-teal-700" />
+            ) : (
+              <VolumeX className="h-3.5 w-3.5 text-slate-400" />
+            )}
+            <span className="hidden sm:inline">
+              {soundEnabled ? "Sound On" : "Sound Off"}
+            </span>
+          </button>
+
+          {soundEnabled && (
+            <button
+              onClick={() => playNotificationChime()}
+              title="Test notification chime sound"
+              aria-label="Test chime"
+              className="flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              <Bell className="h-3.5 w-3.5 text-teal-600" />
+              <span className="hidden md:inline">Test</span>
+            </button>
           )}
-        >
-          {soundEnabled ? (
-            <Volume2 className="h-3.5 w-3.5 text-teal-700" />
-          ) : (
-            <VolumeX className="h-3.5 w-3.5 text-slate-400" />
-          )}
-          <span className="hidden sm:inline">
-            {soundEnabled ? "Sound On" : "Sound Off"}
-          </span>
-        </button>
+        </div>
 
         <button
           onClick={onRefresh}
@@ -1091,6 +1121,20 @@ export default function AdminDashboard() {
   useEffect(() => {
     soundEnabledRef.current = soundEnabled;
   }, [soundEnabled]);
+
+  // Unlock browser audio pipeline on first user interaction
+  useEffect(() => {
+    const unlockAudio = () => {
+      try {
+        const audio = new Audio("/sounds/notification.wav");
+        audio.load();
+      } catch {
+        // ignore
+      }
+    };
+    window.addEventListener("click", unlockAudio, { once: true });
+    return () => window.removeEventListener("click", unlockAudio);
+  }, []);
 
   const handleToggleSound = useCallback(() => {
     setSoundEnabled((prev) => {
