@@ -109,6 +109,146 @@ const COMMON_CONCERNS = [
 ];
 
 /* ------------------------------------------------------------------ */
+/*  Notification Sound Pipeline (Web Audio API + In-Memory Decoded WAV) */
+/* ------------------------------------------------------------------ */
+
+let sharedAudioCtx: AudioContext | null = null;
+let cachedAudioBuffer: AudioBuffer | null = null;
+let isAudioPreloading = false;
+
+function getSharedAudioContext(): AudioContext | null {
+  if (typeof window === "undefined") return null;
+  if (!sharedAudioCtx) {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (AudioContextClass) {
+      sharedAudioCtx = new AudioContextClass();
+    }
+  }
+  return sharedAudioCtx;
+}
+
+async function preloadNotificationBuffer() {
+  if (typeof window === "undefined" || cachedAudioBuffer || isAudioPreloading) return;
+  const ctx = getSharedAudioContext();
+  if (!ctx) return;
+
+  isAudioPreloading = true;
+  try {
+    const res = await fetch("/sounds/notification.wav");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const arrayBuffer = await res.arrayBuffer();
+    cachedAudioBuffer = await ctx.decodeAudioData(arrayBuffer);
+  } catch (err) {
+    console.warn("Could not preload notification audio buffer:", err);
+  } finally {
+    isAudioPreloading = false;
+  }
+}
+
+function primeAudioPipeline() {
+  if (typeof window === "undefined") return;
+  const ctx = getSharedAudioContext();
+  if (!ctx) return;
+
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+  }
+
+  // Play a silent 1-sample buffer to satisfy Chrome's autoplay gesture requirement
+  try {
+    const silentBuf = ctx.createBuffer(1, 1, 22050);
+    const source = ctx.createBufferSource();
+    source.buffer = silentBuf;
+    source.connect(ctx.destination);
+    source.start(0);
+  } catch {
+    // ignore
+  }
+
+  preloadNotificationBuffer();
+}
+
+function playSynthesizedChime(ctx: AudioContext) {
+  const now = ctx.currentTime;
+
+  // Tone 1: E5 (659.25Hz) resonant chime
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+  osc1.type = "sine";
+  osc1.frequency.setValueAtTime(659.25, now);
+  gain1.gain.setValueAtTime(0.85, now);
+  gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+  osc1.start(now);
+  osc1.stop(now + 0.85);
+
+  // Tone 2: A5 (880Hz) resonant harmonic note with full 1.5s sustain
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = "sine";
+  osc2.frequency.setValueAtTime(880, now + 0.16);
+  gain2.gain.setValueAtTime(0.95, now + 0.16);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+  osc2.start(now + 0.16);
+  osc2.stop(now + 1.5);
+}
+
+async function playNotificationChime() {
+  if (typeof window === "undefined") return;
+
+  const ctx = getSharedAudioContext();
+
+  if (ctx) {
+    if (ctx.state === "suspended") {
+      try {
+        await ctx.resume();
+      } catch {
+        // ignore
+      }
+    }
+
+    if (cachedAudioBuffer) {
+      try {
+        const source = ctx.createBufferSource();
+        source.buffer = cachedAudioBuffer;
+        const gainNode = ctx.createGain();
+        gainNode.gain.setValueAtTime(1.0, ctx.currentTime);
+        source.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        source.start(0);
+        return;
+      } catch (err) {
+        console.warn("Buffer playback failed, using synth fallback:", err);
+      }
+    }
+
+    // Synthesized chime on active context
+    try {
+      playSynthesizedChime(ctx);
+      return;
+    } catch (err) {
+      console.warn("Synth playback failed:", err);
+    }
+  }
+
+  // HTML5 audio fallback
+  try {
+    const audio = new Audio("/sounds/notification.wav");
+    audio.volume = 1.0;
+    audio.play().catch((err) => {
+      console.warn("HTML5 audio playback blocked:", err);
+    });
+  } catch {
+    // ignore
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /*  Doctor Login Screen                                                */
 /* ------------------------------------------------------------------ */
 
@@ -124,6 +264,7 @@ function DoctorLoginView({ onSuccess }: DoctorLoginViewProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    primeAudioPipeline();
     setError(null);
     setLoading(true);
 
@@ -404,92 +545,6 @@ function Sidebar({
       </aside>
     </>
   );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Notification Sound (HTML5 Audio + Web Audio Fallback)              */
-/* ------------------------------------------------------------------ */
-
-let preloadedAudio: HTMLAudioElement | null = null;
-
-function getNotificationAudio(): HTMLAudioElement | null {
-  if (typeof window === "undefined") return null;
-  if (!preloadedAudio) {
-    try {
-      preloadedAudio = new Audio("/sounds/notification.wav");
-      preloadedAudio.volume = 1.0;
-      preloadedAudio.preload = "auto";
-    } catch {
-      // ignore
-    }
-  }
-  return preloadedAudio;
-}
-
-function playNotificationChime() {
-  if (typeof window === "undefined") return;
-
-  const audio = getNotificationAudio();
-  if (audio) {
-    try {
-      audio.currentTime = 0;
-      audio.volume = 1.0;
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn("Audio element play interrupted, using Web Audio fallback:", err);
-          playWebAudioFallback();
-        });
-        return;
-      }
-    } catch (err) {
-      console.warn("Audio element play error:", err);
-    }
-  }
-
-  playWebAudioFallback();
-}
-
-async function playWebAudioFallback() {
-  try {
-    const AudioContextClass =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-
-    const ctx = new AudioContextClass();
-    if (ctx.state === "suspended") {
-      await ctx.resume();
-    }
-
-    const now = ctx.currentTime;
-
-    // Full, loud, resonant chime (Tone 1: E5 659.25Hz)
-    const osc1 = ctx.createOscillator();
-    const gain1 = ctx.createGain();
-    osc1.type = "sine";
-    osc1.frequency.setValueAtTime(659.25, now);
-    gain1.gain.setValueAtTime(0.7, now);
-    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-    osc1.connect(gain1);
-    gain1.connect(ctx.destination);
-    osc1.start(now);
-    osc1.stop(now + 0.8);
-
-    // Tone 2: A5 (880Hz) with full resonant sustain
-    const osc2 = ctx.createOscillator();
-    const gain2 = ctx.createGain();
-    osc2.type = "sine";
-    osc2.frequency.setValueAtTime(880, now + 0.16);
-    gain2.gain.setValueAtTime(0.85, now + 0.16);
-    gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
-    osc2.connect(gain2);
-    gain2.connect(ctx.destination);
-    osc2.start(now + 0.16);
-    osc2.stop(now + 1.4);
-  } catch (err) {
-    console.warn("Could not play notification sound:", err);
-  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -1131,21 +1186,29 @@ export default function AdminDashboard() {
     soundEnabledRef.current = soundEnabled;
   }, [soundEnabled]);
 
-  // Unlock browser audio pipeline on first user interaction
+  // Prime browser audio pipeline on any user gesture across the page
   useEffect(() => {
-    const unlockAudio = () => {
-      try {
-        const audio = new Audio("/sounds/notification.wav");
-        audio.load();
-      } catch {
-        // ignore
-      }
+    preloadNotificationBuffer();
+
+    const handleUserInteraction = () => {
+      primeAudioPipeline();
     };
-    window.addEventListener("click", unlockAudio, { once: true });
-    return () => window.removeEventListener("click", unlockAudio);
+
+    window.addEventListener("click", handleUserInteraction, { passive: true });
+    window.addEventListener("pointerdown", handleUserInteraction, { passive: true });
+    window.addEventListener("keydown", handleUserInteraction, { passive: true });
+    window.addEventListener("touchstart", handleUserInteraction, { passive: true });
+
+    return () => {
+      window.removeEventListener("click", handleUserInteraction);
+      window.removeEventListener("pointerdown", handleUserInteraction);
+      window.removeEventListener("keydown", handleUserInteraction);
+      window.removeEventListener("touchstart", handleUserInteraction);
+    };
   }, []);
 
   const handleToggleSound = useCallback(() => {
+    primeAudioPipeline();
     setSoundEnabled((prev) => {
       const next = !prev;
       if (next) {
