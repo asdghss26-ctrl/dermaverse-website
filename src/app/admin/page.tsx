@@ -278,7 +278,7 @@ function Sidebar({
       <aside
         style={{ backgroundColor: T.sidebar }}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-[240px] flex-col",
+          "fixed inset-y-0 left-0 z-50 flex w-60 flex-col",
           "transition-transform duration-200 ease-in-out",
           "lg:translate-x-0 lg:static lg:z-auto",
           open ? "translate-x-0" : "-translate-x-full"
@@ -333,7 +333,7 @@ function Sidebar({
               color: activeView === "kanban" ? T.white : "#94A3B8",
             }}
           >
-            <Columns3 className="h-[18px] w-[18px] shrink-0" />
+            <Columns3 className="h-4.5 w-4.5 shrink-0" />
             Time Slot Columns
           </button>
 
@@ -351,7 +351,7 @@ function Sidebar({
               color: activeView === "table" ? T.white : "#94A3B8",
             }}
           >
-            <ListFilter className="h-[18px] w-[18px] shrink-0" />
+            <ListFilter className="h-4.5 w-4.5 shrink-0" />
             All Appointments Table
           </button>
 
@@ -722,7 +722,7 @@ function AppointmentCard({
         {/* Row 1: Name + Status */}
         <div className="flex items-start justify-between gap-2 mb-1.5">
           <p
-            className="text-sm font-semibold leading-snug break-words min-w-0"
+            className="text-sm font-semibold leading-snug wrap-break-word min-w-0"
             style={{ color: T.heading }}
           >
             {appointment.patientName}
@@ -732,7 +732,7 @@ function AppointmentCard({
 
         {/* Row 2: Concern */}
         <p
-          className="text-[13px] leading-relaxed break-words mb-2 font-medium"
+          className="text-[13px] leading-relaxed wrap-break-word mb-2 font-medium"
           style={{ color: T.body }}
         >
           {appointment.concern}
@@ -892,7 +892,7 @@ function SlotColumn({
       </div>
 
       {/* Cards list */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 min-h-[220px]">
+      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 min-h-55">
         {appointments.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center px-4">
             <SlotIcon className="h-8 w-8 mb-2 opacity-30" style={{ color: T.secondary }} />
@@ -1523,7 +1523,7 @@ export default function AdminDashboard() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search name, phone, concern..."
-                      className="w-full sm:w-[220px] rounded-md border py-1.5 pl-8 pr-3 text-[13px] outline-none transition-colors"
+                      className="w-full sm:w-55 rounded-md border py-1.5 pl-8 pr-3 text-[13px] outline-none transition-colors"
                       style={{
                         borderColor: T.border,
                         color: T.heading,
