@@ -35,9 +35,9 @@ export function Footer() {
 
         <div className="bg-olive text-taupe">
           <div className="site-container py-12">
-            <p className="eyebrow text-taupe/80">Dr. Jansi&apos;s</p>
+            <p className="eyebrow text-taupe/80">Dr. Jansi’s</p>
             <p className="mt-1 font-heading text-3xl uppercase leading-none tracking-[0.12em] text-taupe">
-              Dermverse
+              DERMVERSE
             </p>
             <p className="mt-3 text-sm leading-relaxed text-taupe/80">
               {clinic.tagline}.
@@ -91,6 +91,15 @@ export function Footer() {
                 />
                 WhatsApp us
               </a>
+              {(clinic as any).email && (
+                <a
+                  href={`mailto:${(clinic as any).email}`}
+                  className="flex min-h-11 items-center gap-3"
+                >
+                  <span className="h-4 w-4 shrink-0 text-sand" aria-hidden="true">@</span>
+                  {(clinic as any).email}
+                </a>
+              )}
             </div>
 
             <div className="mt-6 border-t border-taupe/20 pt-4 text-[12px] uppercase leading-relaxed tracking-[0.08em] text-taupe">
@@ -137,9 +146,9 @@ export function Footer() {
           <div className="site-container py-12 md:py-12">
             <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
               <div className="md:col-span-5">
-                <p className="eyebrow text-taupe/70">Dr. Jansi&apos;s</p>
+                <p className="eyebrow text-taupe/70">Dr. Jansi’s</p>
                 <h2 className="mt-2 font-heading text-4xl uppercase leading-none tracking-[0.12em] text-taupe md:text-5xl">
-                  Dermverse
+                  DERMVERSE
                 </h2>
                 <p className="mt-5 max-w-sm text-sm leading-relaxed text-taupe/80">
                   {clinic.tagline}
@@ -202,6 +211,15 @@ export function Footer() {
                     />
                     WhatsApp us
                   </a>
+                  {(clinic as any).email && (
+                    <a
+                      href={`mailto:${(clinic as any).email}`}
+                      className="flex min-h-[44px] items-center gap-3 transition-colors duration-200 hover:text-cream"
+                    >
+                      <span className="h-4 w-4 text-sand" aria-hidden="true">@</span>
+                      {(clinic as any).email}
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

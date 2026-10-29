@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { createAppointment } from "@/lib/appointments";
 import { Button } from "@/components/ui/Button";
 import { Send, CheckCircle2 } from "lucide-react";
-import { services } from "@/data/services";
+import { services, serviceCategories } from "@/data/services";
 
 interface AppointmentFormProps {
   className?: string;
@@ -53,11 +53,6 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
     timeSlot?: string;
   }>({});
   const [showSuccess, setShowSuccess] = useState(false);
-
-  const concernOptions = [
-    ...services.map((s) => s.title),
-    "General Consultation",
-  ];
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -175,7 +170,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           Appointment Request Sent!
         </h3>
         <p className="mt-4 text-base text-brown/90 leading-relaxed max-w-md mx-auto">
-          Thank you. Your consultation request has been received by Dr. Jansi&apos;s Dermverse team. We will reach out to you via WhatsApp or phone call to confirm your appointment time.
+          Thank you. Your consultation request has been received by Dr. Jansi’s DERMVERSE team. We will reach out to you via WhatsApp or phone call to confirm your appointment time.
         </p>
         <div className="mt-8 pt-6 border-t border-sand/40 flex justify-center">
           <button
@@ -293,11 +288,18 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           )}
         >
           <option value="">Select a service or concern</option>
-          {concernOptions.map((title) => (
-            <option key={title} value={title}>
-              {title}
-            </option>
+          {serviceCategories.map((category) => (
+            <optgroup key={category.id} label={category.label}>
+              {services
+                .filter((s) => s.category === category.id)
+                .map((s) => (
+                  <option key={s.slug} value={s.title}>
+                    {s.title}
+                  </option>
+                ))}
+            </optgroup>
           ))}
+          <option value="General Consultation">General Consultation</option>
         </select>
         {errors.concern && (
           <p

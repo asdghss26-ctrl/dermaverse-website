@@ -78,10 +78,10 @@ export function Header() {
               aria-label={`${clinic.fullName}, Home`}
             >
               <span className="font-heading text-[11px] uppercase tracking-[0.22em] text-sand-strong">
-                Dr. Jansi&apos;s
+                Dr. Jansi’s
               </span>
               <span className="mt-1 font-heading text-xl uppercase tracking-[0.12em] text-brown md:text-2xl">
-                Dermverse
+                DERMVERSE
               </span>
             </Link>
 

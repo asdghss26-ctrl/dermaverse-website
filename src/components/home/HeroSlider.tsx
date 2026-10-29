@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, Clock, Pause, Play, Phone } from "lucide-react";
+import { ArrowUpRight, Clock, Phone } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -166,7 +166,7 @@ function HeroSlideImage({
 
 export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [userPaused, setUserPaused] = useState(false);
+  const userPaused = false;
   const [focusPaused, setFocusPaused] = useState(false);
   const [swipePaused, setSwipePaused] = useState(false);
   const [isInView, setIsInView] = useState(true);
@@ -294,7 +294,6 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
     isInView;
   const pauseReasonKey = [
     reduceMotion && "m",
-    userPaused && "u",
     focusPaused && "f",
     swipePaused && "s",
     !isDocumentVisible && "v",
@@ -337,17 +336,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   }, [advance, autoplayRunning, pauseReasonKey, setProgress]);
 
   const handleToggleAutoplay = () => {
-    if (reduceMotion) return;
-
-    if (userPaused) {
-      clearSwipeTimer();
-      setUserPaused(false);
-      setFocusPaused(false);
-      setSwipePaused(false);
-      return;
-    }
-
-    setUserPaused(true);
+    // Play/pause button removed
   };
 
   const handlePointerEnter = (event: ReactPointerEvent<HTMLElement>) => {
@@ -615,34 +604,6 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
               );
             })}
           </div>
-
-          <div className="flex shrink-0 flex-col items-end gap-1">
-            {reduceMotion ? (
-              <span className="whitespace-nowrap text-[11px] leading-none text-cream/85">
-                Autoplay is off
-              </span>
-            ) : null}
-            <button
-              type="button"
-              data-hero-play
-              onClick={handleToggleAutoplay}
-              disabled={reduceMotion}
-              aria-label={
-                reduceMotion
-                  ? "Autoplay is off because reduced motion is enabled"
-                  : userPaused
-                    ? "Play slideshow"
-                    : "Pause slideshow"
-              }
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-cream/70 text-cream transition-colors hover:border-cream hover:bg-cream hover:text-brown disabled:cursor-not-allowed disabled:border-cream/50 disabled:text-cream/80"
-            >
-              {userPaused || reduceMotion ? (
-                <Play className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <Pause className="h-4 w-4" aria-hidden="true" />
-              )}
-            </button>
-          </div>
         </div>
       </div>
 
@@ -683,41 +644,11 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
               );
             })}
           </div>
-
-          <div className="flex shrink-0 flex-col items-end gap-1">
-            {reduceMotion ? (
-              <span className="whitespace-nowrap text-[11px] leading-none text-cream/85">
-                Autoplay is off
-              </span>
-            ) : null}
-            <button
-              type="button"
-              data-hero-play
-              onClick={handleToggleAutoplay}
-              disabled={reduceMotion}
-              aria-label={
-                reduceMotion
-                  ? "Autoplay is off because reduced motion is enabled"
-                  : userPaused
-                    ? "Play slideshow"
-                    : "Pause slideshow"
-              }
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-cream/70 text-cream transition-colors hover:border-cream hover:bg-cream hover:text-brown disabled:cursor-not-allowed disabled:border-cream/50 disabled:text-cream/80"
-            >
-              {userPaused || reduceMotion ? (
-                <Play className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <Pause className="h-4 w-4" aria-hidden="true" />
-              )}
-            </button>
-          </div>
         </div>
       </div>
 
       <div className="sr-only" aria-live="polite" aria-atomic="true">
-        {reduceMotion || userPaused
-          ? `${activeSlide.headlineItalic} ${activeSlide.headlineUpright}`
-          : ""}
+        {reduceMotion ? `${activeSlide.headlineItalic} ${activeSlide.headlineUpright}` : ""}
       </div>
     </section>
   );

@@ -13,7 +13,12 @@ export const metadata: Metadata = {
 };
 
 const serviceImages: Record<string, string> = {
-  "laser-treatments": "/images/laser-suite.jpg",
+  "laser-hair-reduction": "/images/laser-suite.jpg",
+  "laser-toning": "/images/laser-suite.jpg",
+  "fractional-co2-laser": "/images/laser-suite.jpg",
+  "q-switched-laser-treatments": "/images/laser-suite.jpg",
+  "tattoo-removal": "/images/laser-suite.jpg",
+  "laser-treatments-for-selected-skin-lesions": "/images/laser-suite.jpg",
 };
 
 export default function LaserServicesPage() {

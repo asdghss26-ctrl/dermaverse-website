@@ -44,7 +44,7 @@ export default function AboutPage() {
 
         <DoctorCard
           name={clinic.doctor.name}
-          title={clinic.doctor.title}
+          title="Founder & Chief Dermatologist"
           qualifications={clinic.doctor.qualifications}
           fellowship={clinic.doctor.fellowship}
           memberships={clinic.doctor.memberships}
@@ -60,7 +60,16 @@ export default function AboutPage() {
             Background
           </h2>
           <div className="space-y-4 text-brown leading-relaxed">
-            <p>{clinic.doctor.bio}</p>
+            <div className="text-base leading-relaxed text-brown whitespace-pre-line">
+              <p>Dr. Jansi Priyadharshini A is a Consultant Dermatologist with a strong foundation in clinical dermatology and advanced aesthetic dermatology. As the Founder and Chief Dermatologist of Dr. Jansi’s Dermverse – Skin, Hair & Laser Clinic, Adyar, Chennai, she is committed to delivering evidence-based, ethical and personalised dermatological care, combining medical expertise with an aesthetic approach to skin and hair health.</p>
+              <p className="mt-4">She completed her MBBS at SRM Medical College and Hospital, Chennai, followed by an MD in Dermatology, Venereology and Leprosy (DVL) at Saveetha Medical College and Hospital, Chennai. To further her expertise in aesthetic medicine, she pursued a Postdoctoral Fellowship in Aesthetic Dermatology at RSV Skin and Laser Institute, Chennai, under the mentorship of Dr. Maya Vedamurthy, a pioneer in the field of aesthetic dermatology.</p>
+              <p className="mt-4">Her areas of interest include clinical dermatology, paediatric dermatology, dermatosurgery, non-surgical hair restoration and energy-based devices in dermatology and aesthetics. She has experience managing a wide spectrum of skin and hair conditions and performing aesthetic procedures, with an emphasis on individualised treatment plans, patient safety and natural-looking results.</p>
+              <p className="mt-4">Dr. Jansi has a particular passion for paediatric dermatology and caring for children with a wide range of skin conditions. She believes children deserve special attention, compassionate care and age-appropriate treatment tailored to their individual needs. Her approach focuses on helping parents understand their child’s skin concerns while providing thoughtful, evidence-based care in a reassuring and child-friendly environment.</p>
+              <p className="mt-4">Beyond clinical practice, Dr. Jansi is actively involved in academic dermatology, scientific presentations, professional education and community outreach. She has presented research at national and international dermatology conferences and has publications in peer-reviewed medical journals. Her research presentation on Harlequin Syndrome received the Best Paper Award at the 46th National Conference of IADVL (DERMACON).</p>
+              <p className="mt-4">She has also contributed to the dermatology community through professional leadership and association activities, including roles within the Tamil Nadu branch of the Indian Association of Dermatologists, Venereologists and Leprologists (IADVL), participation in national committee initiatives and academic conferences, and involvement in workshops, panel discussions and community dermatology programmes.</p>
+              <p className="mt-4">At Dr. Jansi’s Dermverse, her vision is to create a trusted destination for comprehensive skin, hair and laser care, where scientific precision meets compassionate care. She believes every patient deserves to be heard, every treatment should be tailored to individual needs, and every aesthetic journey should prioritise healthy skin, confidence and well-being.</p>
+              <p className="mt-4">Her philosophy is simple: personalised care, evidence-based treatments and a commitment to helping every individual feel confident in their own skin.</p>
+            </div>
             {clinic.doctor.experience && (
               <p>She has {clinic.doctor.experience} of clinical experience.</p>
             )}

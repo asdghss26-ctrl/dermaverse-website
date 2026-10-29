@@ -4,26 +4,26 @@
 export const SITE_URL = "https://dermverse.in";
 
 export const clinic = {
-  name: "Dr. Jansi's Dermverse",
-  tagline: "Skin, Hair & Laser Clinic",
-  fullName: "Dr. Jansi's Dermverse - Skin, Hair & Laser Clinic",
-  wordmark: "Dr. Jansi's Dermverse",
+  name: "Dr. Jansi’s DERMVERSE",
+  tagline: "SKIN HAIR & LASER CLINIC",
+  fullName: "Dr. Jansi’s DERMVERSE – Skin, Hair & Laser Clinic",
+  wordmark: "Dr. Jansi’s DERMVERSE",
 
   doctor: {
     name: "Dr. Jansi Priyadharshini A",
     shortName: "Dr. Jansi",
-    qualifications: ["MBBS", "MD - DVL"],
-    title: "Consultant Dermatologist",
-    // TODO: confirm with doctor. Unconfirmed claim: "10+ years".
+    qualifications: ["MBBS", "MD DVL (Dermatology, Venereology and Leprosy)"],
+    title: "Founder & Chief Dermatologist",
+    designation: "Founder & Chief Dermatologist",
     experience: null as string | null,
-    // TODO: confirm with doctor. Unconfirmed claim: "PDF in Aesthetic Dermatology".
-    fellowship: null as string | null,
-    // TODO: confirm with doctor. Unconfirmed claim: "IADVL", "ACSI".
+    fellowship: "Postdoctoral Fellowship in Aesthetic Dermatology, RSV Skin and Laser Institute, Chennai",
     memberships: null as readonly string[] | null,
-    bio: "Dr. Jansi Priyadharshini A is a Consultant Dermatologist practising clinical dermatology, aesthetic procedures, dermatosurgery, paediatric skin care, energy-based laser treatments and non-surgical hair loss care.",
+    bio: "Dr. Jansi Priyadharshini A is a Consultant Dermatologist with a strong foundation in clinical dermatology and advanced aesthetic dermatology. As the Founder and Chief Dermatologist of Dr. Jansi’s Dermverse – Skin, Hair & Laser Clinic, Adyar, Chennai, she is committed to delivering evidence-based, ethical and personalised dermatological care, combining medical expertise with an aesthetic approach to skin and hair health.",
+    shortBio:
+      "Dr. Jansi Priyadharshini A is a Consultant Dermatologist and the Founder of Dr. Jansi’s Dermverse – Skin, Hair & Laser Clinic, Adyar, Chennai. With an MBBS from SRM Medical College, an MD (DVL) from Saveetha Medical College and a Postdoctoral Fellowship in Aesthetic Dermatology from RSV Skin and Laser Institute under the mentorship of Dr. Maya Vedamurthy, she brings together clinical expertise and advanced aesthetic dermatology.",
     approach:
-      "Precision dermatology and personalised care for acne, pigmentation, hair loss and ageing concerns, aiming for healthy, natural-looking skin.",
-    portraitUrl: "/images/dr-jansi-portrait.jpg",
+      "Personalised care, evidence-based treatments and a commitment to helping every individual feel confident in their own skin.",
+    portraitUrl: "/images/DR jansi's image .jpeg",
     placeholder: false,
   },
 
@@ -40,16 +40,25 @@ export const clinic = {
   },
 
   phone: {
-    display: "073580 72111",
+    display: "7358072111",
     href: "tel:+917358072111",
   },
 
   whatsapp: {
-    display: "073580 72111",
-    href: "https://wa.me/917358072111", // TODO: confirm WhatsApp number with client
+    display: "7358072111",
+    href: "https://wa.me/917358072111",
   },
 
-  hours: "Mon to Sat, 10 AM to 8 PM",
+  email: "dermverseclinic@gmail.com",
+
+  hours: "Mon to Sat, 10:00 AM – 8:00 PM | Sunday: Closed",
+  openingHours: "10:00 AM – 8:00 PM",
+  weeklyHoliday: "Sunday",
+  timeSlots: [
+    { id: "slot1", label: "Slot 1", time: "10:00 AM – 1:00 PM" },
+    { id: "slot2", label: "Slot 2", time: "2:00 PM – 5:00 PM" },
+    { id: "slot3", label: "Slot 3", time: "5:00 PM – 8:00 PM" },
+  ],
 
   google: {
     rating: 5.0,

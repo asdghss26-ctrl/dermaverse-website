@@ -88,11 +88,25 @@ export default function ContactPage() {
                     <MessageCircle className="h-5 w-5 text-sand-strong" />
                   </div>
                   <div>
-                    {/* TODO: confirm WhatsApp number with client */}
                     <p className="text-xs text-sand-strong">WhatsApp</p>
                     <p className="font-semibold text-base">{clinic.whatsapp.display}</p>
                   </div>
                 </a>
+
+                {(clinic as any).email && (
+                  <a
+                    href={`mailto:${(clinic as any).email}`}
+                    className="flex items-center gap-3 text-brown hover:text-brown transition-colors duration-200"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-taupe/60 shrink-0">
+                      <span className="text-sand-strong text-lg">@</span>
+                    </div>
+                    <div>
+                      <p className="text-xs text-sand-strong">Email</p>
+                      <p className="font-semibold text-base">{(clinic as any).email}</p>
+                    </div>
+                  </a>
+                )}
               </div>
 
               <div className="mt-6">

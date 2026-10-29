@@ -13,8 +13,14 @@ export const metadata: Metadata = {
 };
 
 const serviceImages: Record<string, string> = {
-  "hair-fall-scalp-care": "/images/treatment-room.jpg",
-  "non-surgical-hair-loss-care": "/images/consultation-square.jpg",
+  "hair-and-scalp-analysis": "/images/clinic-consultation.jpg",
+  "hair-loss-evaluation-and-management": "/images/treatment-room.jpg",
+  "hair-regrowth-treatments": "/images/treatment-room.jpg",
+  "hair-loss-and-alopecia-areata": "/images/treatment-room.jpg",
+  "prp-growth-factor-concentrate-gfc-for-hair": "/images/treatment-room.jpg",
+  "hair-mesotherapy": "/images/treatment-room.jpg",
+  "dermaroller-for-hair": "/images/treatment-room.jpg",
+  "thermolysis": "/images/treatment-room.jpg",
 };
 
 export default function HairServicesPage() {

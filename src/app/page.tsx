@@ -198,15 +198,15 @@ export default function HomePage() {
           </div>
 
           <div className="lg:col-span-7 text-left">
-            <p className="eyebrow mb-4 text-sand-strong">{clinic.doctor.title}</p>
+            <p className="eyebrow mb-4 text-sand-strong">Meet {clinic.doctor.name} — {clinic.doctor.title}</p>
             <h2 className="font-heading text-[clamp(32px,5vw,56px)] leading-tight tracking-tight text-brown" style={{ textWrap: 'balance', wordBreak: 'keep-all' }}>
-              Dr. Jansi Priyadharshini
+              {clinic.doctor.name}
             </h2>
             <div className="mt-3 space-y-1 text-base text-brown md:text-lg">
               <p>{clinic.doctor.qualifications.join(" · ")}</p>
             </div>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-brown md:text-lg">
-              Dr. Jansi Priyadharshini is a Consultant Dermatologist specialising in clinical dermatology, skin care, hair care, and laser treatments. She focuses on personalised, evidence-based care to help patients achieve healthy, natural-looking skin.
+              {clinic.doctor.shortBio || clinic.doctor.bio}
             </p>
             <Button href="/about" variant="ghost" size="md" className="mt-6 min-h-[44px] self-start px-0">
               Read the Full Bio

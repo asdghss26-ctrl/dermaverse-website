@@ -28,7 +28,7 @@ export default function AppointmentPage() {
           </h1>
           <p className="text-brown max-w-md mx-auto">
             Please fill in your details below. We&apos;ll confirm your appointment during
-            clinic hours: Mon to Sat, 10 AM to 8 PM.
+            clinic hours: Mon to Sat, 10:00 AM – 8:00 PM | Sunday: Closed.
           </p>
         </div>
 
