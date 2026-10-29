@@ -49,8 +49,8 @@ export function ServiceCard({
   return (
     <article className={cn("group relative", className)}>
       <Link href={href} className="block">
-        <div className="editorial-media relative aspect-[4/5] overflow-hidden rounded-md border border-sand shadow-xs transition-all duration-300 group-hover:border-sand-strong group-hover:shadow-md">
-          {imageUrl && (
+        <div className="editorial-media relative aspect-[4/5] h-[170px] w-full overflow-hidden rounded-md border border-sand shadow-xs transition-all duration-300 group-hover:border-sand-strong group-hover:shadow-md sm:h-[190px] md:aspect-[4/5] md:h-auto">
+          {imageUrl ? (
             <>
               <Image
                 src={imageUrl}
@@ -60,24 +60,25 @@ export function ServiceCard({
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
               <div
-                className="absolute inset-0 bg-gradient-to-t from-brown/75 via-brown/20 to-transparent"
+                className="absolute inset-0 bg-gradient-to-t from-brown/70 via-brown/15 to-transparent"
                 aria-hidden="true"
               />
             </>
+          ) : (
+            <div className="absolute inset-0 bg-taupe-soft" aria-hidden="true" />
           )}
 
-          {/* Badge Icon */}
           {IconComponent && (
             <div
               className={cn(
                 "absolute z-10 transition-transform duration-300",
                 imageUrl
-                  ? "right-4 top-4 rounded-full bg-cream/90 p-2 text-brown shadow-xs backdrop-blur-xs group-hover:scale-110"
+                  ? "right-3 top-3 rounded-full bg-cream/90 p-1.5 text-brown shadow-xs backdrop-blur-xs group-hover:scale-110 md:right-4 md:top-4 md:p-2"
                   : "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-brown/25 group-hover:scale-110"
               )}
             >
               <IconComponent
-                className={imageUrl ? "h-4 w-4 text-sand-strong" : "h-16 w-16"}
+                className={imageUrl ? "h-3.5 w-3.5 text-sand-strong md:h-4 md:w-4" : "h-12 w-12 md:h-16 md:w-16"}
                 strokeWidth={imageUrl ? 1.5 : 0.75}
                 aria-hidden="true"
               />
@@ -85,13 +86,16 @@ export function ServiceCard({
           )}
         </div>
 
-        <div className="pt-4">
-          <h3 className="font-heading text-xl uppercase leading-tight tracking-wide text-brown transition-colors duration-300 group-hover:text-sand-strong">
+        <div className="pt-3 md:pt-4">
+          <h3 className="font-heading text-lg uppercase leading-tight tracking-wide text-brown transition-colors duration-300 group-hover:text-sand-strong md:text-xl">
             {title}
           </h3>
-          <p className="mt-1.5 text-sm leading-relaxed text-brown md:line-clamp-2">
+          <p className="mt-1 text-sm leading-relaxed text-brown line-clamp-2">
             {description}
           </p>
+          <span className="mt-2 inline-flex min-h-[44px] items-center text-sm font-medium text-sand-strong underline underline-offset-4 transition-colors group-hover:text-brown">
+            Learn more
+          </span>
         </div>
       </Link>
     </article>

@@ -27,7 +27,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
       <Header />
       <main
         id="main-content"
-        className="flex-1 overflow-x-clip pb-[calc(48px+env(safe-area-inset-bottom))] md:pb-0"
+        className="flex-1 overflow-x-clip pb-[calc(68px+env(safe-area-inset-bottom))] md:pb-0"
       >
         {children}
       </main>

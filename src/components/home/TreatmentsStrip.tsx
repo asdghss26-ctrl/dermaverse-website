@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Clock, Leaf, ScanFace, Sun } from "lucide-react";
+import { Clock, Droplets, Leaf, ScanFace, Sun, Zap } from "lucide-react";
 
 // TODO: confirm all treatment copy with the doctor.
 const treatments = [
@@ -7,76 +7,84 @@ const treatments = [
     title: "Acne",
     description: "Clearer, calmer skin with personalised care.",
     icon: ScanFace,
-    mobileHref: "/services/acne-treatment",
+    href: "/services/acne-treatment",
   },
   {
     title: "Pigmentation",
     description: "Targeted treatment for uneven tone and dark spots.",
     icon: Sun,
-    mobileHref: "/services/pigmentation-chemical-peels",
+    href: "/services/pigmentation-chemical-peels",
   },
   {
     title: "Hair Loss",
     description: "Assessment and personalised care for thinning hair.",
     icon: Leaf,
-    mobileHref: "/services/hair-fall-scalp-care",
+    href: "/services/hair-fall-scalp-care",
   },
   {
-    title: "Anti-ageing",
-    description: "Natural-looking rejuvenation, tailored to you.",
-    icon: Clock,
-    mobileHref: "/services/anti-aging",
+    title: "Laser Care",
+    description: "Energy-based treatments tailored to your skin.",
+    icon: Zap,
+    href: "/services/laser-treatments",
+  },
+  {
+    title: "Skin Brightening",
+    description: "Reveal a brighter, more even complexion.",
+    icon: Droplets,
+    href: "/services/cosmetic-aesthetic-dermatology",
   },
 ] as const;
 
 export function TreatmentsStrip() {
+  const loopItems = [...treatments, ...treatments];
+
   return (
     <nav
       aria-label="Popular treatments"
-      className="border-b border-sand bg-olive md:border-y md:border-taupe/20"
+      className="border-b border-sand bg-olive md:border-y md:border-taupe/20 overflow-x-clip"
     >
       <div className="md:hidden">
-        <ul
-          role="list"
-          aria-label="Popular treatments"
-          tabIndex={0}
-          className="treatment-scroller hide-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-px-4 px-4 py-3.5"
+        <div
+          className="treatment-marquee group/marquee relative w-full overflow-hidden"
+          role="region"
+          aria-label="Treatment category selector"
         >
-          {treatments.map((treatment) => {
-            const Icon = treatment.icon;
+          <div className="treatment-marquee__track flex w-max items-center gap-3 px-4 py-3.5">
+            {loopItems.map((treatment, index) => {
+              const Icon = treatment.icon;
 
-            return (
-              <li
-                key={treatment.title}
-                role="listitem"
-                className="shrink-0 snap-start"
-              >
-                <Link
-                  href={treatment.mobileHref}
-                  className="treatment-chip inline-flex h-11 items-center gap-2 rounded-full border border-sand bg-olive px-4 font-sans text-[15px] font-medium text-cream transition-colors duration-150 hover:border-cream hover:bg-cream/10 hover:text-cream active:bg-[#2b250f] active:text-cream motion-reduce:transition-none [-webkit-tap-highlight-color:transparent] touch-manipulation"
+              return (
+                <div
+                  key={`${treatment.title}-${index}`}
+                  className="shrink-0"
                 >
-                  <Icon
-                    className="h-5 w-5 shrink-0"
-                    strokeWidth={1.5}
-                    aria-hidden="true"
-                  />
-                  <span className="whitespace-nowrap">{treatment.title}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+                  <Link
+                    href={treatment.href}
+                    className="treatment-chip inline-flex h-11 items-center gap-2 rounded-full border border-sand bg-olive px-4 font-sans text-[15px] font-medium text-cream transition-colors duration-150 hover:border-cream hover:bg-cream/10 hover:text-cream active:bg-[#2b250f] active:text-cream motion-reduce:transition-none [-webkit-tap-highlight-color:transparent] touch-manipulation"
+                  >
+                    <Icon
+                      className="h-5 w-5 shrink-0"
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                    />
+                    <span className="whitespace-nowrap">{treatment.title}</span>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <div className="site-container hidden md:block">
-        <div className="grid grid-cols-2 gap-px bg-taupe/30 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-px bg-taupe/30 lg:grid-cols-5">
           {treatments.map((treatment) => {
             const Icon = treatment.icon;
 
             return (
               <Link
                 key={treatment.title}
-                href="#services"
+                href={treatment.href}
                 className="group flex flex-col gap-3 bg-olive p-4 text-taupe transition-colors duration-300 hover:bg-taupe hover:text-brown md:gap-4 md:p-7"
               >
                 <div className="flex items-start justify-between">

@@ -37,7 +37,7 @@ export function Section({
       id={id}
       aria-label={ariaLabel}
       className={cn(
-        "relative py-12 md:py-[clamp(56px,8vh,96px)]",
+        "relative py-10 md:py-[clamp(56px,8vh,96px)]",
         bgStyles[background],
         className
       )}
@@ -46,4 +46,5 @@ export function Section({
       <div className="site-container">{children}</div>
     </section>
   );
+
 }

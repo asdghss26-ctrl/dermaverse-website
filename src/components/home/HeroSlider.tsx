@@ -16,8 +16,8 @@ import { clinic } from "@/data/clinic";
 import type { HeroSlide } from "@/data/heroSlides";
 import { cn } from "@/lib/utils";
 
-const AUTOPLAY_MS = 6000;
-const SWIPE_RESUME_MS = 8000;
+const AUTOPLAY_MS = 4500;
+const SWIPE_RESUME_MS = 6000;
 const MOBILE_MEDIA = "(max-width: 767px)";
 const FINE_POINTER_MEDIA = "(hover: hover) and (pointer: fine)";
 
@@ -167,7 +167,6 @@ function HeroSlideImage({
 export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [userPaused, setUserPaused] = useState(false);
-  const [hoverPaused, setHoverPaused] = useState(false);
   const [focusPaused, setFocusPaused] = useState(false);
   const [swipePaused, setSwipePaused] = useState(false);
   const [isInView, setIsInView] = useState(true);
@@ -289,7 +288,6 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
     slides.length > 1 && !reduceMotion && !userPaused;
   const autoplayRunning =
     autoplayEnabled &&
-    !hoverPaused &&
     !focusPaused &&
     !swipePaused &&
     isDocumentVisible &&
@@ -297,7 +295,6 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const pauseReasonKey = [
     reduceMotion && "m",
     userPaused && "u",
-    hoverPaused && "h",
     focusPaused && "f",
     swipePaused && "s",
     !isDocumentVisible && "v",
@@ -345,7 +342,6 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
     if (userPaused) {
       clearSwipeTimer();
       setUserPaused(false);
-      setHoverPaused(false);
       setFocusPaused(false);
       setSwipePaused(false);
       return;
@@ -356,12 +352,10 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
 
   const handlePointerEnter = (event: ReactPointerEvent<HTMLElement>) => {
     if (!finePointer || event.pointerType !== "mouse") return;
-    setHoverPaused(true);
   };
 
   const handlePointerLeave = (event: ReactPointerEvent<HTMLElement>) => {
     if (!finePointer || event.pointerType !== "mouse") return;
-    setHoverPaused(false);
   };
 
   const handlePointerDownCapture = () => {

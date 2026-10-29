@@ -23,8 +23,8 @@ export const clinic = {
     bio: "Dr. Jansi Priyadharshini A is a Consultant Dermatologist practising clinical dermatology, aesthetic procedures, dermatosurgery, paediatric skin care, energy-based laser treatments and non-surgical hair loss care.",
     approach:
       "Precision dermatology and personalised care for acne, pigmentation, hair loss and ageing concerns, aiming for healthy, natural-looking skin.",
-    portraitUrl: null as string | null,
-    placeholder: true,
+    portraitUrl: "/images/dr-jansi-portrait.jpg",
+    placeholder: false,
   },
 
   // TODO: confirm the full address and parking details with the clinic.
