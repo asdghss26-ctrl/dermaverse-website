@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Appointment } from "@/data/appointments";
@@ -45,6 +45,9 @@ import {
   Lock,
   Loader2,
   ShieldCheck,
+  Volume2,
+  VolumeX,
+  Bell,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -404,6 +407,53 @@ function Sidebar({
 }
 
 /* ------------------------------------------------------------------ */
+/*  Notification Sound (Web Audio API)                                 */
+/* ------------------------------------------------------------------ */
+
+function playNotificationChime() {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    const ctx = new AudioContextClass();
+    if (ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
+    }
+
+    const now = ctx.currentTime;
+
+    // Elegant medical chime: Note 1 (E5: 659.25Hz)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = "sine";
+    osc1.frequency.setValueAtTime(659.25, now);
+    gain1.gain.setValueAtTime(0.18, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.45);
+
+    // Note 2 (A5: 880Hz)
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(880, now + 0.12);
+    gain2.gain.setValueAtTime(0.22, now + 0.12);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.12);
+    osc2.stop(now + 0.75);
+  } catch (err) {
+    console.warn("Could not play notification sound:", err);
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /*  Top bar                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -412,6 +462,8 @@ interface TopBarProps {
   onOpenAddModal: () => void;
   onRefresh: () => void;
   onLogout: () => void;
+  soundEnabled: boolean;
+  onToggleSound: () => void;
   refreshing?: boolean;
   userEmail?: string | null;
 }
@@ -421,6 +473,8 @@ function TopBar({
   onOpenAddModal,
   onRefresh,
   onLogout,
+  soundEnabled,
+  onToggleSound,
   refreshing,
   userEmail,
 }: TopBarProps) {
@@ -459,6 +513,27 @@ function TopBar({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
+        <button
+          onClick={onToggleSound}
+          title={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
+          aria-label={soundEnabled ? "Mute notification sound" : "Enable notification sound"}
+          className={cn(
+            "flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[12px] font-medium transition-colors cursor-pointer",
+            soundEnabled
+              ? "border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100"
+              : "border-slate-200 bg-slate-50 text-slate-400 hover:bg-slate-100"
+          )}
+        >
+          {soundEnabled ? (
+            <Volume2 className="h-3.5 w-3.5 text-teal-700" />
+          ) : (
+            <VolumeX className="h-3.5 w-3.5 text-slate-400" />
+          )}
+          <span className="hidden sm:inline">
+            {soundEnabled ? "Sound On" : "Sound Off"}
+          </span>
+        </button>
+
         <button
           onClick={onRefresh}
           disabled={refreshing}
@@ -1007,6 +1082,29 @@ export default function AdminDashboard() {
     }, 3200);
   }, []);
 
+  // Sound notification state
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const soundEnabledRef = useRef(soundEnabled);
+  const isInitialSnapshotRef = useRef(true);
+  const knownAppointmentIdsRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
+
+  const handleToggleSound = useCallback(() => {
+    setSoundEnabled((prev) => {
+      const next = !prev;
+      if (next) {
+        playNotificationChime();
+        showToast("Notification sound enabled");
+      } else {
+        showToast("Notification sound muted");
+      }
+      return next;
+    });
+  }, [showToast]);
+
   // Listen to Firebase Auth state
   useEffect(() => {
     if (!isFirebaseConfigured()) return;
@@ -1023,10 +1121,14 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!currentUser) return;
 
+    isInitialSnapshotRef.current = true;
+    knownAppointmentIdsRef.current = new Set();
+
     // Immediately fetch once to ensure immediate data population
     getAppointments()
       .then((items) => {
         if (items.length > 0) {
+          items.forEach((item) => knownAppointmentIdsRef.current.add(item.id));
           setAppointments(items);
         }
       })
@@ -1036,6 +1138,25 @@ export default function AdminDashboard() {
 
     const unsubscribe = subscribeAppointments(
       (items) => {
+        // Play notification sound and show banner for appointments arriving after initial load
+        if (!isInitialSnapshotRef.current) {
+          const newAppointments = items.filter(
+            (item) => !knownAppointmentIdsRef.current.has(item.id)
+          );
+
+          if (newAppointments.length > 0) {
+            if (soundEnabledRef.current) {
+              playNotificationChime();
+            }
+            const latest = newAppointments[0];
+            showToast(
+              `New appointment received: ${latest.patientName} - ${latest.concern}`
+            );
+          }
+        }
+
+        items.forEach((item) => knownAppointmentIdsRef.current.add(item.id));
+        isInitialSnapshotRef.current = false;
         setAppointments(items);
       },
       (err) => {
@@ -1044,7 +1165,7 @@ export default function AdminDashboard() {
     );
 
     return unsubscribe;
-  }, [currentUser]);
+  }, [currentUser, showToast]);
 
   /* -- Actions ------------------------------------------------------ */
   const handleAccept = useCallback(
@@ -1223,7 +1344,7 @@ export default function AdminDashboard() {
       {/* Toast notification banner */}
       {toastMessage && (
         <div className="fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg bg-slate-900 text-white px-4 py-2.5 shadow-lg text-xs font-medium animate-in fade-in slide-in-from-top-3 duration-200">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+          <Bell className="h-4 w-4 text-teal-400 shrink-0" />
           <span>{toastMessage}</span>
           <button
             onClick={() => setToastMessage(null)}
@@ -1258,6 +1379,8 @@ export default function AdminDashboard() {
           onOpenAddModal={() => setAddModalOpen(true)}
           onRefresh={handleRefresh}
           onLogout={handleLogout}
+          soundEnabled={soundEnabled}
+          onToggleSound={handleToggleSound}
           refreshing={refreshing}
           userEmail={currentUser?.email}
         />
