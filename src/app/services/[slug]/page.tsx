@@ -100,7 +100,7 @@ export default async function ServiceDetailPage({
       </Section>
 
       {/* What it is */}
-      <Section background="taupe" ariaLabel="What it is" hasPlaceholderData>
+      <Section background="taupe" ariaLabel="What it is">
         <div className="max-w-3xl mx-auto">
           <h2 className="display-md text-brown mb-4">
             What It Is
@@ -112,7 +112,7 @@ export default async function ServiceDetailPage({
       </Section>
 
       {/* Who it suits */}
-      <Section background="cream" ariaLabel="Who it suits" hasPlaceholderData>
+      <Section background="cream" ariaLabel="Who it suits">
         <div className="max-w-3xl mx-auto">
           <h2 className="display-md text-brown mb-4">
             Who It May Suit
@@ -127,7 +127,6 @@ export default async function ServiceDetailPage({
       <Section
         background="taupe"
         ariaLabel="What to expect"
-        hasPlaceholderData
       >
         <div className="max-w-3xl mx-auto">
           <h2 className="display-md text-brown mb-4">
@@ -164,7 +163,6 @@ export default async function ServiceDetailPage({
         <Section
           background="cream"
           ariaLabel="Related services"
-          hasPlaceholderData
         >
           <div className="max-w-3xl mx-auto">
             <h2 className="display-md text-brown mb-6">

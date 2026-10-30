@@ -131,7 +131,6 @@ export default function HomePage() {
         id="services"
         background="cream"
         ariaLabel="Our treatments"
-        hasPlaceholderData
         className="scroll-mt-[var(--header-h)] pt-[clamp(56px,8vh,96px)]"
       >
         <div className="mb-8 md:mb-12">
@@ -178,7 +177,6 @@ export default function HomePage() {
         id="about"
         background="taupe"
         ariaLabel="About the doctor"
-        hasPlaceholderData={clinic.doctor.placeholder}
       >
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
@@ -218,7 +216,6 @@ export default function HomePage() {
       <Section
         background="cream"
         ariaLabel="How we work"
-        hasPlaceholderData
       >
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-6">
@@ -339,7 +336,6 @@ export default function HomePage() {
         id="faq"
         background="taupe"
         ariaLabel="Frequently asked questions"
-        hasPlaceholderData
       >
         <div className="grid grid-cols-1 gap-7 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-4">

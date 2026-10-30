@@ -557,24 +557,6 @@ h4.font-heading {
   }
 }
 
-/* Sample content badge */
-.sample-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 2px 8px;
-  background: var(--color-olive);
-  color: var(--color-cream);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  border-radius: var(--radius-pill);
-  z-index: 10;
-  pointer-events: none;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
 /* Soft taupe decorative glow */
 .watercolor-blob {
   position: absolute;

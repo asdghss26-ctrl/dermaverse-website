@@ -236,9 +236,6 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
                         aria-current={isActive ? "page" : undefined}
                       >
                         {link.label}
-                        {isActive && (
-                          <span className="absolute bottom-2 left-0 h-px w-full bg-sand" />
-                        )}
                       </Link>
                     </motion.div>
                   );

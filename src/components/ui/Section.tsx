@@ -10,8 +10,6 @@ interface SectionProps {
   background?: SectionBackground;
   className?: string;
   children: ReactNode;
-  /** Show the sample content label */
-  hasPlaceholderData?: boolean;
   /** Accessible label for the section */
   ariaLabel?: string;
 }
@@ -27,11 +25,8 @@ export function Section({
   background = "cream",
   className,
   children,
-  hasPlaceholderData = false,
   ariaLabel,
 }: SectionProps) {
-  const showBadge = hasPlaceholderData;
-
   return (
     <section
       id={id}
@@ -42,7 +37,6 @@ export function Section({
         className
       )}
     >
-      {showBadge && <span className="sample-badge">Sample content</span>}
       <div className="site-container">{children}</div>
     </section>
   );

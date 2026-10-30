@@ -26,7 +26,6 @@ export default function FAQPage() {
         background="cream"
         className="pt-8 pb-10 md:pt-16 md:pb-14"
         ariaLabel="Frequently asked questions"
-        hasPlaceholderData
       >
         <div className="text-center mb-10">
           <p className="eyebrow mb-4 text-sand-strong">Questions</p>

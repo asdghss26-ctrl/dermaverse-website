@@ -160,7 +160,7 @@ export function MobileBottomBar() {
               </span>
               {isBook && (
                 <span
-                  className="absolute top-0 h-[2px] w-6"
+                  className="absolute bottom-1 left-1/2 h-[2px] w-6 -translate-x-1/2"
                   style={{ backgroundColor: "var(--color-sand)" }}
                   aria-hidden="true"
                 />

@@ -33,7 +33,6 @@ export default function AboutPage() {
         background="cream"
         className="pt-8 pb-10 md:pt-16 md:pb-14"
         ariaLabel="About the doctor"
-        hasPlaceholderData={clinic.doctor.placeholder}
       >
         <div className="text-center mb-10">
           <p className="eyebrow mb-4 text-sand-strong">The dermatologist</p>
@@ -54,7 +53,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Bio */}
-      <Section background="taupe" ariaLabel="Doctor biography" hasPlaceholderData>
+      <Section background="taupe" ariaLabel="Doctor biography">
         <div className="max-w-3xl mx-auto">
           <h2 className="display-md text-brown mb-4">
             Background
