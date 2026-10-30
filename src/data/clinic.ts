@@ -16,7 +16,7 @@ export const clinic = {
     title: "Founder & Chief Dermatologist",
     designation: "Founder & Chief Dermatologist",
     experience: null as string | null,
-    fellowship: "Postdoctoral Fellowship in Aesthetic Dermatology, RSV Skin and Laser Institute, Chennai",
+    fellowship: "Postdoctoral Fellowship in Aesthetic Dermatology",
     memberships: null as readonly string[] | null,
     bio: "Dr. Jansi Priyadharshini A is a Consultant Dermatologist with a strong foundation in clinical dermatology and advanced aesthetic dermatology. As the Founder and Chief Dermatologist of Dr. Jansi’s Dermverse – Skin, Hair & Laser Clinic, Adyar, Chennai, she is committed to delivering evidence-based, ethical and personalised dermatological care, combining medical expertise with an aesthetic approach to skin and hair health.",
     shortBio:
