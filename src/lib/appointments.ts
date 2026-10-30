@@ -6,8 +6,6 @@ import {
   updateDoc,
   deleteDoc,
   onSnapshot,
-  query,
-  orderBy,
   serverTimestamp,
   type Unsubscribe,
 } from "firebase/firestore";
@@ -75,7 +73,7 @@ export async function getAppointments(): Promise<Appointment[]> {
       };
     });
 
-    items.sort((a: any, b: any) => {
+    items.sort((a, b) => {
       const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
       const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
       return tB - tA;
@@ -119,7 +117,7 @@ export function subscribeAppointments(
           };
         });
 
-        items.sort((a: any, b: any) => {
+        items.sort((a, b) => {
           const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
           const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
           return tB - tA;

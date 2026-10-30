@@ -5,6 +5,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { MobileBottomBar } from "./MobileBottomBar";
 import type { ReactNode } from "react";
+import { MotionConfig } from "framer-motion";
 
 /**
  * Wraps the public website chrome (header, footer, mobile bar).
@@ -20,7 +21,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
@@ -33,6 +34,6 @@ export function PublicShell({ children }: { children: ReactNode }) {
       </main>
       <Footer />
       <MobileBottomBar />
-    </>
+    </MotionConfig>
   );
 }

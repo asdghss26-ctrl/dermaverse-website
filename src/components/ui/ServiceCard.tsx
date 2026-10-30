@@ -45,9 +45,13 @@ export function ServiceCard({
   className,
 }: ServiceCardProps) {
   const IconComponent = iconMap[icon];
-
   return (
-    <article className={cn("group relative", className)}>
+    <article
+      className={cn(
+        "group relative transition-transform duration-200 ease-out hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none",
+        className
+      )}
+    >
       <Link href={href} className="block">
         <div className="editorial-media relative aspect-[4/5] h-[170px] w-full overflow-hidden rounded-md border border-sand shadow-xs transition-all duration-300 group-hover:border-sand-strong group-hover:shadow-md sm:h-[190px] md:aspect-[4/5] md:h-auto">
           {imageUrl ? (
@@ -57,7 +61,7 @@ export function ServiceCard({
                 alt={title}
                 fill
                 sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
               />
               <div
                 className="absolute inset-0 bg-gradient-to-t from-forest/70 via-forest/15 to-transparent"

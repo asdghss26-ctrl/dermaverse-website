@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { useState, useId } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 export interface FAQItem {
   question: string;
@@ -17,6 +18,7 @@ interface FAQAccordionProps {
 export function FAQAccordion({ items, className }: FAQAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const id = useId();
+  const reduceMotion = useReducedMotion();
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -46,29 +48,28 @@ export function FAQAccordion({ items, className }: FAQAccordionProps) {
               <span>{item.question}</span>
               <Plus
                 className={cn(
-                  "h-4 w-4 shrink-0 text-sand-strong transition-transform duration-300 md:h-5 md:w-5",
+                  "h-4 w-4 shrink-0 text-sand-strong transition-transform duration-300 motion-reduce:transition-none md:h-5 md:w-5",
                   isOpen && "rotate-45"
                 )}
                 strokeWidth={1.5}
                 aria-hidden="true"
               />
             </button>
-            <div
+            <motion.div
               id={panelId}
               role="region"
               aria-labelledby={buttonId}
               aria-hidden={!isOpen}
-              className={cn(
-                "overflow-hidden transition-[max-height] duration-300 ease-in-out",
-                isOpen ? "max-h-96" : "max-h-0"
-              )}
+              inert={!isOpen}
+              initial={false}
+              animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.24, ease: "easeOut" }}
+              className="overflow-hidden"
             >
-              <div hidden={!isOpen}>
-                <p className="max-w-xl pb-6 text-sm leading-relaxed text-brown">
-                  {item.answer}
-                </p>
-              </div>
-            </div>
+              <p className="max-w-xl pb-6 text-sm leading-relaxed text-brown">
+                {item.answer}
+              </p>
+            </motion.div>
           </div>
         );
       })}

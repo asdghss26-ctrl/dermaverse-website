@@ -13,6 +13,7 @@ export interface Appointment {
   timeSlot: "Morning" | "Evening" | "Night";
   status: AppointmentStatus;
   message?: string;
+  createdAt?: { toMillis?: () => number; seconds?: number } | null;
 }
 
 /** Sample requests covering every combination we need. */

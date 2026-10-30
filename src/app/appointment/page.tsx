@@ -3,6 +3,7 @@ import { clinic } from "@/data/clinic";
 import { AppointmentForm } from "@/components/AppointmentForm";
 import { Section } from "@/components/ui/Section";
 import { Phone, MessageCircle, MapPin, Clock } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export const metadata: Metadata = {
   title: `Book Appointment | ${clinic.fullName}`,
@@ -34,14 +35,14 @@ export default function AppointmentPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 max-w-4xl mx-auto">
           {/* Form column */}
-          <div className="lg:col-span-3">
+          <ScrollReveal className="lg:col-span-3">
             <div className="border border-sand bg-cream p-6 md:p-8">
               <AppointmentForm />
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Contact info sidebar */}
-          <div className="lg:col-span-2 space-y-6">
+          <ScrollReveal className="lg:col-span-2 space-y-6" delay={0.08}>
             {/* Direct contact */}
             <div className="border border-sand bg-cream p-6">
               <h2 className="font-heading text-2xl text-brown mb-4">
@@ -109,7 +110,7 @@ export default function AppointmentPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </Section>
     </>

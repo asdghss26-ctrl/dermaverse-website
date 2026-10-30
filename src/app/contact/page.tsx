@@ -93,9 +93,9 @@ export default function ContactPage() {
                   </div>
                 </a>
 
-                {(clinic as any).email && (
+                {clinic.email && (
                   <a
-                    href={`mailto:${(clinic as any).email}`}
+                    href={`mailto:${clinic.email}`}
                     className="flex items-center gap-3 text-brown hover:text-brown transition-colors duration-200"
                   >
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-taupe/60 shrink-0">
@@ -103,7 +103,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs text-sand-strong">Email</p>
-                      <p className="font-semibold text-base">{(clinic as any).email}</p>
+                      <p className="font-semibold text-base">{clinic.email}</p>
                     </div>
                   </a>
                 )}

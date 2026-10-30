@@ -6,6 +6,7 @@ import { createAppointment } from "@/lib/appointments";
 import { Button } from "@/components/ui/Button";
 import { Send, CheckCircle2 } from "lucide-react";
 import { services, serviceCategories } from "@/data/services";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface AppointmentFormProps {
   className?: string;
@@ -36,6 +37,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
+  const reduceMotion = useReducedMotion();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -161,7 +163,12 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
 
   if (showSuccess) {
     return (
-      <div className="border border-sand bg-cream p-8 md:p-10 text-center animate-in fade-in duration-300">
+      <motion.div
+        className="border border-sand bg-cream p-8 text-center md:p-10"
+        initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.24, ease: "easeOut" }}
+      >
         <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-olive/10 text-olive">
           <CheckCircle2 className="h-9 w-9 text-olive" />
         </div>
@@ -181,7 +188,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
             Book Another Consultation
           </button>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -327,7 +334,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           {TIME_SLOTS.map((slot) => {
             const isSelected = formData.timeSlot === slot.id;
             return (
-              <button
+              <motion.button
                 key={slot.id}
                 type="button"
                 role="radio"
@@ -339,6 +346,8 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
                     ? "border-forest bg-forest text-cream shadow-sm"
                     : "border-deep-green bg-cream hover:border-forest text-brown"
                 )}
+                whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+                transition={{ duration: 0.12 }}
               >
                 <span
                   className={cn(
@@ -356,7 +365,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
                 >
                   {slot.time}
                 </span>
-              </button>
+              </motion.button>
             );
           })}
         </div>

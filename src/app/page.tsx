@@ -29,6 +29,7 @@ import { Hero } from "@/components/home/Hero";
 import { TreatmentsStrip } from "@/components/home/TreatmentsStrip";
 import { ProcessArch } from "@/components/home/ProcessArch";
 import { FAQAccordion } from "@/components/ui/FAQAccordion";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { TreatmentImageSlider } from "@/components/home/TreatmentImageSlider";
 import { CalendarDays, ArrowRight } from "lucide-react";
 import {
@@ -179,7 +180,7 @@ export default function HomePage() {
         ariaLabel="About the doctor"
       >
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
+          <ScrollReveal className="lg:col-span-5">
             {clinic.doctor.portraitUrl ? (
               <div className="relative mx-auto w-full max-w-[420px] overflow-hidden border border-sand/60 shadow-sm">
                 <div className="relative aspect-[3/4] w-full">
@@ -193,9 +194,9 @@ export default function HomePage() {
                 </div>
               </div>
             ) : null}
-          </div>
+          </ScrollReveal>
 
-          <div className="lg:col-span-7 text-left">
+          <ScrollReveal className="lg:col-span-7 text-left" delay={0.08}>
             <p className="eyebrow mb-4 text-sand-strong">Meet {clinic.doctor.name} — {clinic.doctor.title}</p>
             <h2 className="font-heading text-[clamp(32px,5vw,56px)] leading-tight tracking-tight text-brown" style={{ textWrap: 'balance', wordBreak: 'keep-all' }}>
               {clinic.doctor.name}
@@ -209,7 +210,7 @@ export default function HomePage() {
             <Button href="/about" variant="ghost" size="md" className="mt-6 min-h-[44px] self-start px-0">
               Read the Full Bio
             </Button>
-          </div>
+          </ScrollReveal>
         </div>
       </Section>
 

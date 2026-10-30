@@ -107,7 +107,7 @@ export function Header() {
                   href={link.href}
                   className={cn(
                     "relative font-heading text-base uppercase tracking-[0.01em] transition-colors duration-200",
-                    "after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-sand-strong after:transition-transform after:duration-300 hover:after:scale-x-100",
+                    "after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-sand-strong after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-reduce:after:transition-none",
                     pathname === link.href
                       ? "text-sand-strong after:scale-x-100"
                       : "text-brown hover:text-sand-strong"
@@ -146,19 +146,19 @@ export function Header() {
               <div className="flex flex-col gap-1">
                 <span
                   className={cn(
-                    "h-px w-5 bg-current transition-all duration-300",
+                    "h-px w-5 bg-current transition-all duration-300 motion-reduce:transition-none",
                     mobileOpen ? "translate-y-[3px] rotate-45" : ""
                   )}
                 />
                 <span
                   className={cn(
-                    "h-px w-5 bg-current transition-all duration-300",
+                    "h-px w-5 bg-current transition-all duration-300 motion-reduce:transition-none",
                     mobileOpen ? "opacity-0" : ""
                   )}
                 />
                 <span
                   className={cn(
-                    "h-px w-5 bg-current transition-all duration-300",
+                    "h-px w-5 bg-current transition-all duration-300 motion-reduce:transition-none",
                     mobileOpen ? "-translate-y-[3px] -rotate-45" : ""
                   )}
                 />

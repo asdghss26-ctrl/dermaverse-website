@@ -142,7 +142,7 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0.2 : 0.3 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
             onClick={onClose}
             aria-hidden="true"
           />
@@ -169,7 +169,7 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
                 : { x: "100%", opacity: 1 }
             }
             transition={{
-              duration: shouldReduceMotion ? 0.2 : 0.6,
+              duration: shouldReduceMotion ? 0 : 0.6,
               ease: [0.76, 0, 0.24, 1],
             }}
           >
@@ -220,7 +220,7 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
                           : { opacity: 1, y: 0 }
                       }
                       transition={{
-                        duration: 0.4,
+                        duration: shouldReduceMotion ? 0 : 0.4,
                         delay: shouldReduceMotion ? 0 : i * 0.05,
                         ease: [0.76, 0, 0.24, 1],
                       }}
@@ -253,7 +253,7 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
                       : { opacity: 1, y: 0 }
                   }
                   transition={{
-                    duration: 0.4,
+                    duration: shouldReduceMotion ? 0 : 0.4,
                     delay: shouldReduceMotion ? 0 : navItems.length * 0.05,
                     ease: [0.76, 0, 0.24, 1],
                   }}

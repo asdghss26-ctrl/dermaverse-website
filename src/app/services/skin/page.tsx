@@ -6,6 +6,7 @@ import { ServiceCard } from "@/components/ui/ServiceCard";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, MessageCircle, Phone } from "lucide-react";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Skin Treatments",
@@ -89,7 +90,7 @@ export default function SkinServicesPage() {
       <Section background="cream" className="pt-0 pb-10 md:pb-12">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => (
-            <div key={service.slug} className="fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
+            <ScrollReveal key={service.slug} delay={(index % 3) * 0.045}>
               <ServiceCard
                 title={service.title}
                 description={service.shortDescription}
@@ -97,7 +98,7 @@ export default function SkinServicesPage() {
                 imageUrl={serviceImages[service.slug] ?? service.imageUrl}
                 href={`/services/${service.slug}`}
               />
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </Section>

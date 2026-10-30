@@ -2,6 +2,7 @@ import Link from "next/link";
 import { mainNav } from "@/data/navigation";
 import { clinic } from "@/data/clinic";
 import { Phone, MessageCircle, MapPin } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 // Kept static so the footer can be prerendered; update annually.
 const COPYRIGHT_YEAR = "2026";
@@ -14,7 +15,7 @@ export function Footer() {
       {/* Mobile footer */}
       <div className="md:hidden">
         <div className="bg-taupe-soft text-brown">
-          <div className="site-container py-12">
+          <ScrollReveal className="site-container py-12">
             <h2 className="display-md max-w-xs text-brown">
               Begin your
               <br />
@@ -30,7 +31,7 @@ export function Footer() {
             >
               Book Consultation
             </Link>
-          </div>
+          </ScrollReveal>
         </div>
 
         <div className="bg-olive text-taupe">
@@ -91,13 +92,13 @@ export function Footer() {
                 />
                 WhatsApp us
               </a>
-              {(clinic as any).email && (
+              {clinic.email && (
                 <a
-                  href={`mailto:${(clinic as any).email}`}
+                  href={`mailto:${clinic.email}`}
                   className="flex min-h-11 items-center gap-3"
                 >
                   <span className="h-4 w-4 shrink-0 text-sand" aria-hidden="true">@</span>
-                  {(clinic as any).email}
+                  {clinic.email}
                 </a>
               )}
             </div>
@@ -120,7 +121,7 @@ export function Footer() {
       {/* Desktop footer */}
       <div className="hidden md:block">
         <div className="border-b border-sand/60 bg-taupe-soft text-brown">
-          <div className="site-container grid items-end gap-8 py-12 md:py-[clamp(56px,8vh,96px)] md:grid-cols-2">
+          <ScrollReveal className="site-container grid items-end gap-8 py-12 md:py-[clamp(56px,8vh,96px)] md:grid-cols-2">
             <h2 className="display-lg max-w-lg text-brown max-w-[18ch]">
               Begin your
               <br />
@@ -139,7 +140,7 @@ export function Footer() {
                 Book Consultation
               </Link>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
         <div className="bg-olive text-taupe">
@@ -211,13 +212,13 @@ export function Footer() {
                     />
                     WhatsApp us
                   </a>
-                  {(clinic as any).email && (
+                  {clinic.email && (
                     <a
-                      href={`mailto:${(clinic as any).email}`}
+                      href={`mailto:${clinic.email}`}
                       className="flex min-h-[44px] items-center gap-3 transition-colors duration-200 hover:text-cream"
                     >
                       <span className="h-4 w-4 text-sand" aria-hidden="true">@</span>
-                      {(clinic as any).email}
+                    {clinic.email}
                     </a>
                   )}
                 </div>

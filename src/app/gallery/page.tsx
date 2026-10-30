@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { clinic } from "@/data/clinic";
 import { galleryItems } from "@/data/gallery";
 import { Section } from "@/components/ui/Section";
-import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
-import { ArrowUpRight } from "lucide-react";
+import { GalleryGrid } from "@/components/gallery/GalleryGrid";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -39,47 +38,9 @@ export default function GalleryPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {galleryItems.map((item, idx) => (
-            <article
-              key={item.id}
-              className="group overflow-hidden rounded-md border border-sand-strong bg-taupe-soft transition-all duration-300 hover:border-brown hover:shadow-sm"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-taupe">
-                {item.imageUrl ? (
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.alt}
-                    fill
-                    priority={idx === 0}
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                ) : (
-                  <ImagePlaceholder
-                    caption={item.caption}
-                    aspectRatio="landscape"
-                  />
-                )}
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-forest/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="p-4 flex items-center justify-between">
-                <div>
-                  <h2 className="text-sm font-semibold tracking-wide text-brown">
-                    {item.caption}
-                  </h2>
-                  <p className="text-xs text-sand-strong mt-0.5">{item.alt}</p>
-                </div>
-                <span className="eyebrow text-sand-strong">{String(idx + 1).padStart(2, "0")}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+        <GalleryGrid items={galleryItems} />
 
-        <div className="mt-16 text-center border-t border-sand pt-12">
+        <ScrollReveal className="mt-16 border-t border-sand pt-12 text-center">
           <h2 className="font-heading text-2xl md:text-3xl text-brown mb-3">
             Experience personalised care in Adyar
           </h2>
@@ -93,7 +54,7 @@ export default function GalleryPage() {
           >
             Book Consultation
           </Button>
-        </div>
+        </ScrollReveal>
       </Section>
     </>
   );
