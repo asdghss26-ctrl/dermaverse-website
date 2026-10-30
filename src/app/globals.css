@@ -2,20 +2,22 @@
 
 @theme inline {
   /* Palette */
-  --color-cream: #fff8f5;
-  --color-taupe-soft: #efe7e0;
-  --color-taupe: #d8cbc2;
-  --color-sand: #a18267;
-  --color-sand-strong: #7a5f47;
-  --color-olive: #3b3418;
-  --color-brown: #2d241b;
+  --color-cream: #F7F3EA;
+  --color-taupe-soft: #EAE4D9;
+  --color-taupe: #E8D8B8;
+  --color-sand: #C5A46D;
+  --color-sand-strong: #244B3C;
+  --color-olive: #183D32;
+  --color-deep-green: #244B3C;
+  --color-forest: #183D32;
+  --color-brown: #30291F;
 
   /* Semantic aliases */
   --color-background: var(--color-cream);
   --color-foreground: var(--color-brown);
-  --color-primary: var(--color-brown);
+  --color-primary: var(--color-forest);
   --color-primary-text: var(--color-cream);
-  --color-secondary: var(--color-olive);
+  --color-secondary: var(--color-deep-green);
   --color-section-alt: var(--color-taupe-soft);
   --color-footer: var(--color-olive);
 
@@ -171,18 +173,7 @@ h4.font-heading {
 }
 
 .editorial-media-deep {
-  background:
-    radial-gradient(
-      110% 90% at 20% 0%,
-      color-mix(in srgb, var(--color-sand) 55%, var(--color-brown)) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      100% 80% at 90% 100%,
-      var(--color-brown) 0%,
-      transparent 60%
-    ),
-    linear-gradient(160deg, var(--color-sand-strong) 0%, var(--color-olive) 100%);
+  background: linear-gradient(160deg, var(--color-deep-green) 0%, var(--color-olive) 100%);
 }
 
 .arch {
@@ -192,77 +183,70 @@ h4.font-heading {
 .hero-placeholder {
   background: linear-gradient(
     70deg,
-    var(--color-brown) 0%,
-    var(--color-olive) 64%,
-    var(--color-olive) 86%,
-    var(--color-taupe) 98%,
-    var(--color-sand) 100%
+    var(--color-forest) 0%,
+    var(--color-deep-green) 68%,
+    var(--color-taupe) 100%
   );
 }
 
 .hero-placeholder--skin {
   background: linear-gradient(
     65deg,
-    var(--color-brown) 0%,
-    var(--color-olive) 58%,
-    var(--color-taupe) 88%,
-    var(--color-sand) 100%
+    var(--color-forest) 0%,
+    var(--color-deep-green) 70%,
+    var(--color-taupe) 100%
   );
 }
 
 .hero-placeholder--hair {
   background: linear-gradient(
     110deg,
-    var(--color-olive) 0%,
-    var(--color-brown) 42%,
-    var(--color-taupe) 78%,
-    var(--color-sand-strong) 100%
+    var(--color-forest) 0%,
+    var(--color-deep-green) 68%,
+    var(--color-taupe) 100%
   );
 }
 
 .hero-placeholder--laser {
   background: linear-gradient(
     150deg,
-    var(--color-brown) 0%,
-    var(--color-olive) 36%,
-    color-mix(in srgb, var(--color-taupe) 82%, var(--color-sand)) 76%,
-    var(--color-sand) 100%
+    var(--color-forest) 0%,
+    var(--color-deep-green) 62%,
+    var(--color-taupe) 100%
   );
 }
 
 .hero-placeholder--confidence {
   background: linear-gradient(
     25deg,
-    var(--color-sand-strong) 0%,
-    var(--color-taupe) 46%,
-    var(--color-olive) 82%,
-    var(--color-brown) 100%
+    var(--color-deep-green) 0%,
+    var(--color-forest) 100%
   );
 }
 
 .hero-media-scrim {
   background: linear-gradient(
     to top,
-    color-mix(in srgb, var(--color-brown) 95%, transparent) 0%,
-    color-mix(in srgb, var(--color-brown) 85%, transparent) 50%,
-    color-mix(in srgb, var(--color-brown) 25%, transparent) 100%
+    color-mix(in srgb, var(--color-forest) 95%, transparent) 0%,
+    color-mix(in srgb, var(--color-forest) 85%, transparent) 50%,
+    color-mix(in srgb, var(--color-forest) 25%, transparent) 100%
   );
 }
 
 .hero-skin-ground {
   background: linear-gradient(
     70deg,
-    var(--color-brown) 0%,
-    var(--color-olive) 68%,
-    var(--color-olive) 100%
+    var(--color-forest) 0%,
+    var(--color-deep-green) 68%,
+    var(--color-forest) 100%
   );
 }
 
 .hero-mobile-scrim {
   background: linear-gradient(
     to top,
-    color-mix(in srgb, var(--color-brown) 96%, transparent) 0%,
-    color-mix(in srgb, var(--color-brown) 82%, transparent) 45%,
+    color-mix(in srgb, var(--color-forest) 96%, transparent) 0%,
+    color-mix(in srgb, var(--color-forest) 82%, transparent) 45%,
     transparent 70%
   );
 }
@@ -271,19 +255,18 @@ h4.font-heading {
   .hero-placeholder {
     background: linear-gradient(
       70deg,
-      var(--color-brown) 0%,
-      var(--color-olive) 60%,
-      var(--color-taupe) 82%,
-      var(--color-sand) 100%
+      var(--color-forest) 0%,
+      var(--color-deep-green) 60%,
+      var(--color-forest) 100%
     );
   }
 
   .hero-media-scrim {
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--color-brown) 75%, transparent) 0%,
-      color-mix(in srgb, var(--color-brown) 75%, transparent) 35%,
-      color-mix(in srgb, var(--color-brown) 50%, transparent) 50%,
+      color-mix(in srgb, var(--color-forest) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-forest) 90%, transparent) 35%,
+      color-mix(in srgb, var(--color-forest) 62%, transparent) 50%,
       transparent 65%
     );
   }

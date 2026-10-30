@@ -142,7 +142,7 @@ export function MobileBottomBar() {
               <span
                 className="absolute -top-6 flex h-[54px] w-[54px] items-center justify-center rounded-full"
                 style={{
-                  backgroundColor: "var(--color-brown)",
+                  backgroundColor: "var(--color-forest)",
                   border: "4px solid var(--color-cream)",
                   boxShadow: "0 1px 0 rgb(45 36 27 / 0.05)",
                 }}
@@ -152,7 +152,7 @@ export function MobileBottomBar() {
               <span
                 className="mt-8 text-[12px] font-sans leading-none"
                 style={{
-                  color: isBook ? "var(--color-brown)" : "var(--color-sand-strong)",
+                  color: isBook ? "var(--color-forest)" : "var(--color-sand-strong)",
                   fontWeight: isBook ? 500 : 400,
                 }}
               >

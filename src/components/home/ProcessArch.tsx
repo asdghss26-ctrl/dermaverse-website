@@ -126,7 +126,7 @@ export function ProcessArch() {
                     className={cn(
                       "flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium transition-colors duration-200 md:border",
                       active
-                        ? "text-brown md:border-brown md:bg-brown md:text-cream"
+                        ? "text-brown md:border-forest md:bg-forest md:text-cream"
                         : "text-sand-strong md:border-sand-strong md:group-hover:bg-taupe-soft"
                     )}
                   >

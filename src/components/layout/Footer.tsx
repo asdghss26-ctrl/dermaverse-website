@@ -26,7 +26,7 @@ export function Footer() {
             </p>
             <Link
               href="/appointment"
-              className="mt-6 flex min-h-12 w-full items-center justify-center rounded-full bg-brown px-6 text-[11px] font-medium uppercase tracking-[0.14em] text-cream"
+              className="mt-6 flex min-h-12 w-full items-center justify-center rounded-full bg-forest px-6 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors hover:bg-deep-green"
             >
               Book Consultation
             </Link>
@@ -134,7 +134,7 @@ export function Footer() {
               </p>
 <Link
                 href="/appointment"
-                className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-brown px-8 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors duration-300 hover:bg-olive hover:text-cream md:w-auto"
+                className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-forest px-8 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors duration-300 hover:bg-deep-green md:w-auto"
               >
                 Book Consultation
               </Link>

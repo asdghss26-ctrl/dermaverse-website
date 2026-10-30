@@ -79,7 +79,7 @@ export default function ServicesPage() {
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brown/80 via-brown/25 to-transparent" aria-hidden="true" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/25 to-transparent" aria-hidden="true" />
                 </div>
                 <div className="flex flex-col gap-2 p-5 md:p-6">
                   <p className="eyebrow text-sand-strong">Category</p>

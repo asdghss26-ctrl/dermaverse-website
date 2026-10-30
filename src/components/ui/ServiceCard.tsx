@@ -60,7 +60,7 @@ export function ServiceCard({
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
               <div
-                className="absolute inset-0 bg-gradient-to-t from-brown/70 via-brown/15 to-transparent"
+                className="absolute inset-0 bg-gradient-to-t from-forest/70 via-forest/15 to-transparent"
                 aria-hidden="true"
               />
             </>

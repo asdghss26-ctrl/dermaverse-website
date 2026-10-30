@@ -275,7 +275,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/appointment"
-              className="mt-6 inline-flex min-h-[52px] items-center justify-center gap-2 bg-brown px-8 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors hover:bg-olive"
+              className="mt-6 inline-flex min-h-[52px] items-center justify-center gap-2 bg-forest px-8 text-[11px] font-medium uppercase tracking-[0.14em] text-cream transition-colors hover:bg-deep-green"
             >
               <CalendarDays className="h-4 w-4" aria-hidden="true" />
               BOOK A CONSULTATION

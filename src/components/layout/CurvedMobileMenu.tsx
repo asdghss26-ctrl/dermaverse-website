@@ -138,7 +138,7 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
       {isOpen && (
         <>
           <motion.div
-            className="fixed inset-0 z-[60] bg-brown/40 md:hidden"
+            className="fixed inset-0 z-[60] bg-forest/40 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -265,7 +265,7 @@ export function CurvedMobileMenu({ isOpen, onClose, triggerRef }: CurvedMobileMe
                   <Link
                     href="/appointment"
                     onClick={onClose}
-                    className="flex min-h-[52px] w-full items-center justify-center rounded-full bg-brown text-[11px] font-medium uppercase tracking-[0.14em] text-cream"
+                    className="flex min-h-[52px] w-full items-center justify-center rounded-full bg-forest text-[11px] font-medium uppercase tracking-[0.14em] text-cream"
                   >
                     Book Consultation
                   </Link>

@@ -29,15 +29,15 @@ export type ButtonProps = ButtonBaseProps &
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-brown text-cream border border-brown hover:bg-olive hover:border-olive hover:text-cream hover:underline hover:decoration-sand hover:underline-offset-4",
+    "bg-forest text-cream border border-forest hover:bg-deep-green hover:border-deep-green hover:text-cream hover:underline hover:decoration-sand hover:underline-offset-4",
   "primary-on-dark":
-    "bg-cream text-brown border border-cream hover:bg-taupe hover:border-taupe hover:text-brown hover:underline hover:decoration-sand hover:underline-offset-4",
+    "bg-cream text-forest border border-cream hover:bg-taupe hover:border-taupe hover:text-forest hover:underline hover:decoration-sand hover:underline-offset-4",
   secondary:
-    "bg-transparent text-brown border-[1.5px] border-brown hover:bg-brown hover:text-cream",
+    "bg-transparent text-brown border-[1.5px] border-brown hover:bg-forest hover:border-forest hover:text-cream",
   "secondary-on-dark":
-    "bg-transparent text-taupe border-[1.5px] border-taupe hover:bg-taupe hover:text-brown",
+    "bg-transparent text-taupe border-[1.5px] border-taupe hover:bg-taupe hover:text-forest",
   "secondary-outline-cream":
-    "bg-transparent text-cream border-[1.5px] border-cream hover:bg-cream hover:text-brown",
+    "bg-transparent text-cream border-[1.5px] border-cream hover:bg-cream hover:text-forest",
   ghost:
     "bg-transparent text-brown border border-transparent hover:text-sand-strong hover:underline hover:decoration-sand hover:underline-offset-4",
 };

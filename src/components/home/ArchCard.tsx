@@ -50,7 +50,7 @@ export function ArchCard({ name, title, className }: ArchCardProps) {
         )}
 
         <div
-          className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-brown/90 via-brown/55 to-transparent"
+          className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-forest/90 via-forest/55 to-transparent"
           aria-hidden="true"
         />
 

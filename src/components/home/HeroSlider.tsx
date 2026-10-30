@@ -456,7 +456,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
       aria-roledescription="carousel"
       aria-label="Dermverse highlights"
       tabIndex={0}
-      className="relative isolate h-[calc(100svh-var(--header-h))] min-h-[520px] max-h-[640px] w-full touch-pan-y overflow-hidden bg-brown md:h-[min(86vh,820px)] md:min-h-[560px] md:max-h-none"
+      className="relative isolate h-[calc(100svh-var(--header-h))] min-h-[520px] max-h-[640px] w-full touch-pan-y overflow-hidden bg-forest md:h-[min(86vh,820px)] md:min-h-[560px] md:max-h-none"
       data-hero-slider
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
@@ -507,7 +507,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                 )}
               >
                 <div className="w-full max-w-2xl md:w-auto">
-                  <div className="mb-6 hidden w-fit max-w-full items-center gap-3 rounded-sm bg-brown/35 px-3 py-1.5 md:flex md:bg-transparent md:px-0 md:py-0">
+                  <div className="mb-6 hidden w-fit max-w-full items-center gap-3 rounded-sm bg-forest/35 px-3 py-1.5 md:flex md:bg-transparent md:px-0 md:py-0">
                     <span
                       className="h-px w-10 shrink-0 bg-cream/70"
                       aria-hidden="true"
@@ -563,7 +563,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
       </div>
 
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-t from-brown/95 via-brown/85 to-transparent md:h-24"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-t from-forest/95 via-forest/85 to-transparent md:h-24"
         aria-hidden="true"
       />
 

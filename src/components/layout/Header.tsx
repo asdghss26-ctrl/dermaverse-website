@@ -7,6 +7,7 @@ import { mainNav, ctaNav } from "@/data/navigation";
 import { clinic } from "@/data/clinic";
 import { CurvedMobileMenu } from "./CurvedMobileMenu";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export function Header() {
@@ -70,18 +71,28 @@ export function Header() {
             scrolled ? "border-sand/70" : "border-transparent"
           )}
         >
-          <div className="site-container flex h-[var(--header-h)] items-center justify-between py-0">
+          <div className="mx-auto flex h-[var(--header-h)] w-[min(calc(100%-64px),1440px)] items-center justify-between py-0">
             {/* Wordmark */}
             <Link
               href="/"
-              className="flex min-h-11 shrink-0 flex-col justify-center leading-none"
+              className="flex min-h-11 shrink-0 items-center gap-2.5 leading-none"
               aria-label={`${clinic.fullName}, Home`}
             >
-              <span className="font-heading text-[11px] uppercase tracking-[0.22em] text-sand-strong">
-                Dr. Jansi’s
-              </span>
-              <span className="mt-1 font-heading text-xl uppercase tracking-[0.12em] text-brown md:text-2xl">
-                DERMVERSE
+              <Image
+                src="/images/clinic-logo.png"
+                alt=""
+                width={548}
+                height={456}
+                priority
+                className="h-9 w-11 shrink-0 object-contain md:h-11 md:w-[3.25rem]"
+              />
+              <span className="flex flex-col justify-center">
+                <span className="font-heading text-[11px] uppercase tracking-[0.22em] text-sand-strong">
+                  Dr. Jansi’s
+                </span>
+                <span className="mt-1 font-heading text-xl uppercase tracking-[0.12em] text-brown md:text-2xl">
+                  DERMVERSE
+                </span>
               </span>
             </Link>
 

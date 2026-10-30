@@ -152,7 +152,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
   const inputClasses = cn(
     "w-full rounded-none border-0 border-b bg-transparent px-0 py-3",
     "text-brown text-base placeholder:text-sand-strong",
-    "focus:border-sand-strong focus:ring-0",
+    "focus:border-deep-green focus:ring-0",
     "transition-colors duration-200 min-h-[48px]"
   );
 
@@ -176,7 +176,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           <button
             type="button"
             onClick={() => setShowSuccess(false)}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-none bg-brown px-8 text-xs font-semibold uppercase tracking-[0.14em] text-cream transition-colors hover:bg-olive cursor-pointer"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-none bg-forest px-8 text-xs font-semibold uppercase tracking-[0.14em] text-cream transition-colors hover:bg-deep-green cursor-pointer"
           >
             Book Another Consultation
           </button>
@@ -211,7 +211,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           aria-describedby={errors.name ? "appointment-name-error" : undefined}
           className={cn(
             inputClasses,
-            errors.name ? "border-brown" : "border-sand"
+            errors.name ? "border-brown" : "border-deep-green"
           )}
         />
         {errors.name && (
@@ -253,7 +253,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           aria-describedby={errors.phone ? "appointment-phone-error" : undefined}
           className={cn(
             inputClasses,
-            errors.phone ? "border-brown" : "border-sand"
+            errors.phone ? "border-brown" : "border-deep-green"
           )}
         />
         {errors.phone && (
@@ -283,7 +283,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           aria-describedby={errors.concern ? "appointment-concern-error" : undefined}
           className={cn(
             inputClasses,
-            "border-sand appearance-none cursor-pointer",
+            "border-deep-green appearance-none cursor-pointer",
             errors.concern && "border-brown"
           )}
         >
@@ -336,8 +336,8 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
                 className={cn(
                   "flex flex-col items-center justify-center p-3.5 border transition-all duration-200 text-center cursor-pointer",
                   isSelected
-                    ? "border-brown bg-brown text-cream shadow-sm"
-                    : "border-sand bg-cream hover:border-sand-strong text-brown"
+                    ? "border-forest bg-forest text-cream shadow-sm"
+                    : "border-deep-green bg-cream hover:border-forest text-brown"
                 )}
               >
                 <span
@@ -384,7 +384,7 @@ export function AppointmentForm({ className }: AppointmentFormProps) {
           placeholder="Tell us about your concern or preferred appointment date (optional)"
           value={formData.message}
           onChange={handleChange}
-          className={cn(inputClasses, "border-sand min-h-[80px] resize-y")}
+          className={cn(inputClasses, "border-deep-green min-h-[80px] resize-y")}
         />
       </div>
 

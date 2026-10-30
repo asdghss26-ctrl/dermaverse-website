@@ -161,7 +161,7 @@ export function TreatmentImageSlider() {
                   aria-current={index === activeIndex ? "true" : undefined}
                   className={cn(
                     "h-2 rounded-full transition-all duration-300",
-                    index === activeIndex ? "w-8 bg-brown" : "w-2 bg-sand"
+                    index === activeIndex ? "w-8 bg-forest" : "w-2 bg-sand"
                   )}
                 />
               ))}

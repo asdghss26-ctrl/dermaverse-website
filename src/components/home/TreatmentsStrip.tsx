@@ -88,7 +88,7 @@ export function TreatmentsStrip() {
                 className="group flex flex-col gap-3 bg-olive p-4 text-taupe transition-colors duration-300 hover:bg-taupe hover:text-brown md:gap-4 md:p-7"
               >
                 <div className="flex items-start justify-between">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-taupe/40 text-sand transition-colors duration-300 group-hover:border-brown group-hover:bg-brown group-hover:text-cream md:h-11 md:w-11">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-taupe/40 text-sand transition-colors duration-300 group-hover:border-forest group-hover:bg-forest group-hover:text-cream md:h-11 md:w-11">
                     <Icon className="h-4 w-4 md:h-5 md:w-5" strokeWidth={1.5} aria-hidden="true" />
                   </span>
                 </div>
